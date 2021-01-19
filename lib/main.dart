@@ -1,9 +1,5 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:pawstic/components/horizontalScrollVariant.dart';
-import "package:pawstic/globals.dart" as globals;
 import 'package:pawstic/theme.dart';
 
 import 'components/filterBreed.dart';
@@ -18,19 +14,6 @@ class Main extends StatefulWidget {
 }
 
 class MainState extends State<Main> {
-  void fetchPublishings() async {
-    var result = await http.get(globals.allPublishingsUrl);
-    setState(() {
-      globals.publishings = json.decode(result.body);
-    });
-  }
-
-  Future<void> _getData() async {
-    setState(() {
-      fetchPublishings();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

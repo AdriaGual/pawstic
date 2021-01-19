@@ -41,7 +41,7 @@ class Publish1State extends State<Publish1> {
   }
 
   List<DropdownMenuItem<Specie>> buildDropDownMenuItems(List listItems) {
-    List<DropdownMenuItem<Specie>> items = List();
+    List<DropdownMenuItem<Specie>> items = [];
     for (Specie listItem in listItems) {
       items.add(
         DropdownMenuItem(
