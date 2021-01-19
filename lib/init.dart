@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pawstic/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'onBoarding/onBoarding1.dart';
+import 'pages/onBoarding/onBoarding1.dart';
 
 void main() => runApp(Init());
 

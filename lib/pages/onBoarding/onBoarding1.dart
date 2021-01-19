@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:pawstic/globals.dart" as globals;
-import 'package:pawstic/onBoarding/onBoarding2.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'onBoarding2.dart';
 
 class OnBoarding1 extends StatefulWidget {
   OnBoarding1({Key key}) : super(key: key);

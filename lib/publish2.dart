@@ -197,31 +197,32 @@ class Publish2State extends State<Publish2> {
                           ),
                         ],
                       )),
-                  GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        crossAxisSpacing: 8,
-                        mainAxisSpacing: 10),
-                    padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
-                    shrinkWrap: true,
-                    itemBuilder: (BuildContext context, int i) {
-                      File item = createPublishService.images[i];
-                      return Stack(children: [
-                        ImageFileContainer(item),
-                        Positioned(
+                  if (createPublishService.images.isNotEmpty)
+                    GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          crossAxisSpacing: 8,
+                          mainAxisSpacing: 10),
+                      padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
+                      shrinkWrap: true,
+                      itemBuilder: (BuildContext context, int i) {
+                        File item = createPublishService.images[i];
+                        return Stack(children: [
+                          ImageFileContainer(item),
+                          Positioned(
 //give the values according to your requirement
-                            child: IconButton(
-                          icon: Icon(FeatherIcons.x, color: Colors.white),
-                          onPressed: () {
-                            setState(() {
-                              createPublishService.images.removeAt(i);
-                            });
-                          },
-                        ))
-                      ]);
-                    },
-                    itemCount: createPublishService.images.length,
-                  ),
+                              child: IconButton(
+                            icon: Icon(FeatherIcons.x, color: Colors.white),
+                            onPressed: () {
+                              setState(() {
+                                createPublishService.images.removeAt(i);
+                              });
+                            },
+                          ))
+                        ]);
+                      },
+                      itemCount: createPublishService.images.length,
+                    ),
                   SizedBox(height: 15),
                   SizedBox(
                     width: 200.0,

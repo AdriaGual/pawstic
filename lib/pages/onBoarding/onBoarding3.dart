@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:pawstic/globals.dart" as globals;
 
-import '../mainWrapper.dart';
+import '../../mainWrapper.dart';
 
 class OnBoarding3 extends StatelessWidget {
   @override
