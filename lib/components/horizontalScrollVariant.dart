@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import "package:pawstic/globals.dart" as globals;
+import 'package:pawstic/model/publish.dart';
 
 import 'horizontalCard.dart';
 
@@ -29,9 +30,7 @@ class HorizontalScrollVariantState extends State<HorizontalScrollVariant> {
   }
 
   Future<void> _getData() async {
-    setState(() {
-      fetchPublishings();
-    });
+    fetchPublishings();
   }
 
   @override
@@ -49,8 +48,10 @@ class HorizontalScrollVariantState extends State<HorizontalScrollVariant> {
                     itemBuilder: (BuildContext context, int index) {
                       return Row(
                         children: <Widget>[
-                          HorizontalCard(
-                              publishings[index], 200.0, 170.0, 250.0, 100.0),
+                          if (Publish.fromJson(publishings[index]).imageUrl !=
+                              null)
+                            HorizontalCard(
+                                publishings[index], 200.0, 170.0, 250.0, 100.0),
                         ],
                       );
                     }),

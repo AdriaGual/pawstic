@@ -1,9 +1,9 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:pawstic/components/imageFileContainer.dart';
@@ -66,6 +66,42 @@ class Publish2State extends State<Publish2> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  void getCurrentLocation() async {
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
+        .then((Position position) {
+      setState(() {
+        createPublishService.latitude = position.latitude;
+        createPublishService.longitude = position.longitude;
+        createPublish();
+      });
+    }).catchError((e) {
+      print(e);
+    });
+  }
+
+  void createPublish() {
+    http.post(
+      globals.allPublishingsUrl,
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(<String, String>{
+        'name': createPublishService.name,
+        'years': createPublishService.years.toString(),
+        'weight': createPublishService.weight.toString(),
+        'isMale':
+            (createPublishService.genderSelected == Gender.macho).toString(),
+        'color': createPublishService.colorSelected,
+        'userId': 2.toString(),
+        'breed': createPublishService.breed,
+        'species': createPublishService.specieSelected.id.toString(),
+        'latitude': createPublishService.latitude.toString(),
+        'longitude': createPublishService.longitude.toString(),
+        "likedBy": "1,2"
+      }),
+    );
   }
 
   @override
@@ -227,41 +263,7 @@ class Publish2State extends State<Publish2> {
                     height: 60.0,
                     child: FloatingActionButton.extended(
                       onPressed: () {
-                        String genderName;
-                        if (Gender.macho ==
-                            createPublishService.genderSelected) {
-                          genderName = 'macho';
-                        } else {
-                          genderName = 'hembra';
-                        }
-                        log('Nombre: ' + createPublishService.name);
-                        log('Raza: ' + createPublishService.breed);
-                        log('Especie: ' +
-                            createPublishService.specieSelected.name);
-                        log('Genero: ' + genderName);
-                        log('Color: ' + createPublishService.colorSelected);
-                        http.post(
-                          globals.allPublishingsUrl,
-                          headers: <String, String>{
-                            'Content-Type': 'application/json',
-                          },
-                          body: jsonEncode(<String, String>{
-                            'name': createPublishService.name,
-                            'years': createPublishService.years.toString(),
-                            'weight': createPublishService.weight.toString(),
-                            'isMale': (createPublishService.genderSelected ==
-                                    Gender.macho)
-                                .toString(),
-                            'color': createPublishService.colorSelected,
-                            'userId': 2.toString(),
-                            'breed': createPublishService.breed,
-                            'species': createPublishService.specieSelected.id
-                                .toString(),
-                            'latitude': 2.2.toString(),
-                            'longitude': 6.6.toString(),
-                            "likedBy": "1,2"
-                          }),
-                        );
+                        getCurrentLocation();
                         Navigator.push(
                           context,
                           MaterialPageRoute(

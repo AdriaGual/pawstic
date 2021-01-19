@@ -13,3 +13,5 @@ int years = 1;
 int weight = 10;
 List<File> images = [];
 double lastGeneratedNumber = 2;
+double latitude = 0;
+double longitude = 0;

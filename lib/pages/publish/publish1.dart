@@ -1,5 +1,4 @@
 import 'dart:core';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
@@ -8,7 +7,6 @@ import 'package:pawstic/components/textInput.dart';
 import "package:pawstic/globals.dart" as globals;
 import 'package:pawstic/model/specie.dart';
 import 'package:pawstic/pages/publish/publish2.dart';
-import 'package:pawstic/service/createPublishService.dart';
 import "package:pawstic/service/createPublishService.dart"
     as createPublishService;
 import 'package:pawstic/theme.dart';
@@ -103,19 +101,8 @@ class Publish1State extends State<Publish1> {
             SizedBox(height: 25),
             FloatingActionButton(
               onPressed: () {
-                String genderName;
-                if (Gender.macho == createPublishService.genderSelected) {
-                  genderName = 'macho';
-                } else {
-                  genderName = 'hembra';
-                }
                 createPublishService.name = name.text;
                 createPublishService.breed = breed.text;
-                log('Nombre: ' + createPublishService.name);
-                log('Raza: ' + createPublishService.breed);
-                log('Especie: ' + createPublishService.specieSelected.name);
-                log('Genero: ' + genderName);
-                log('Color: ' + createPublishService.colorSelected);
                 if (breed.text.isEmpty || name.text.isEmpty) {
                   showDialog(
                     context: context,
