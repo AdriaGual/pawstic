@@ -16,6 +16,7 @@ class Publish {
   int species;
   double latitude;
   double longitude;
+  String dateCreated;
   Publish(
       this.publishId,
       this.name,
@@ -28,26 +29,8 @@ class Publish {
       this.imageUrl,
       this.userId,
       this.latitude,
-      this.longitude);
-
-  /*factory Publish.fromJson(Map<String, dynamic> json) {
-
-
-    return Publish(
-      json['_id'],
-      json['name'],
-      json['years'],
-      json['weight'],
-      json['isMale'],
-      json['color'],
-      json['species'],
-      json['breed'],
-      json['imageUrl'],
-      json['userId'],
-      json['latitude'],
-      json['longitude'],
-    );
-  }*/
+      this.longitude,
+      this.dateCreated);
 
   Publish.fromJson(Map json)
       : publishId = json['_id'],
@@ -61,7 +44,8 @@ class Publish {
         imageUrl = json['imageUrl'],
         userId = json['userId'],
         latitude = json['latitude'],
-        longitude = json['longitude'];
+        longitude = json['longitude'],
+        dateCreated = json['dateCreated'];
 
   Map toJson() {
     return {
@@ -76,7 +60,8 @@ class Publish {
       'imageUrl': imageUrl,
       'userId': userId,
       'latitude': latitude,
-      'longitude': longitude
+      'longitude': longitude,
+      'dateCreated': dateCreated
     };
   }
 
