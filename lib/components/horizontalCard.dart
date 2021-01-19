@@ -50,7 +50,8 @@ class HorizontalCardState extends State<HorizontalCard> {
               height: this.heigth,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(16.0),
-                child: Image.network(this.publish.imageUrl, fit: BoxFit.cover),
+                child: Image.network(this.publish.imageUrl.split(',')[0],
+                    fit: BoxFit.cover),
               )),
           Container(
               width: this.width,

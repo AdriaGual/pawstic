@@ -23,6 +23,31 @@ class Publish2 extends StatefulWidget {
 }
 
 class Publish2State extends State<Publish2> {
+  void initState() {
+    super.initState();
+    createPublishService.years = 1;
+    createPublishService.weight = 1;
+    createPublishService.images = [];
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  List<DropdownMenuItem<Specie>> buildDropDownMenuItems(List listItems) {
+    List<DropdownMenuItem<Specie>> items = [];
+    for (Specie listItem in listItems) {
+      items.add(
+        DropdownMenuItem(
+          child: Text(listItem.name),
+          value: listItem,
+        ),
+      );
+    }
+    return items;
+  }
+
   Future getImageFromGallery() async {
     PickedFile selectedFile = await ImagePicker()
         .getImage(source: ImageSource.gallery, imageQuality: 25);
@@ -43,41 +68,6 @@ class Publish2State extends State<Publish2> {
     });
   }
 
-  void initState() {
-    super.initState();
-    createPublishService.years = 1;
-    createPublishService.weight = 1;
-    createPublishService.images = [];
-  }
-
-  List<DropdownMenuItem<Specie>> buildDropDownMenuItems(List listItems) {
-    List<DropdownMenuItem<Specie>> items = [];
-    for (Specie listItem in listItems) {
-      items.add(
-        DropdownMenuItem(
-          child: Text(listItem.name),
-          value: listItem,
-        ),
-      );
-    }
-    return items;
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  Future<String> uploadImage(File image) async {
-    var cloudinary = CloudinaryPublic('drws2krnb', 'uploadImage', cache: false);
-    CloudinaryResponse response = await cloudinary.uploadFile(
-      CloudinaryFile.fromFile(image.path,
-          resourceType: CloudinaryResourceType.Image),
-    );
-    createPublishService.imagesUploaded.add(response.secureUrl);
-    createPublish();
-  }
-
   void getCurrentLocation() async {
     await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
         .then((Position position) {
@@ -85,10 +75,23 @@ class Publish2State extends State<Publish2> {
         createPublishService.latitude = position.latitude;
         createPublishService.longitude = position.longitude;
       });
-      uploadImage(createPublishService.images[0]);
+      uploadImage();
     }).catchError((e) {
       print(e);
     });
+  }
+
+  Future<void> uploadImage() async {
+    for (File image in createPublishService.images) {
+      var cloudinary =
+          CloudinaryPublic('drws2krnb', 'uploadImage', cache: false);
+      CloudinaryResponse response = await cloudinary.uploadFile(
+        CloudinaryFile.fromFile(image.path,
+            resourceType: CloudinaryResourceType.Image),
+      );
+      createPublishService.imagesUploaded.add(response.secureUrl);
+    }
+    createPublish();
   }
 
   void createPublish() {
@@ -109,7 +112,7 @@ class Publish2State extends State<Publish2> {
         'species': createPublishService.specieSelected.id.toString(),
         'latitude': createPublishService.latitude.toString(),
         'longitude': createPublishService.longitude.toString(),
-        'imageUrl': createPublishService.imagesUploaded[0],
+        'imageUrl': createPublishService.imagesUploaded.join(","),
         "likedBy": "1,2"
       }),
     );
