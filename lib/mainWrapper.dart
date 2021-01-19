@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import "package:pawstic/globals.dart" as globals;
-import 'package:pawstic/publish1.dart';
+import 'package:pawstic/pages/publish/publish1.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'components/topBar.dart';

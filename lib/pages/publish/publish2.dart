@@ -9,12 +9,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:pawstic/components/imageFileContainer.dart';
 import "package:pawstic/globals.dart" as globals;
 import 'package:pawstic/mainWrapper.dart';
+import 'package:pawstic/model/specie.dart';
 import "package:pawstic/service/createPublishService.dart"
     as createPublishService;
 import 'package:pawstic/service/createPublishService.dart';
 import 'package:pawstic/theme.dart';
-
-import 'model/specie.dart';
 
 class Publish2 extends StatefulWidget {
   @override

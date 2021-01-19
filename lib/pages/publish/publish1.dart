@@ -6,15 +6,15 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:pawstic/components/radioInputPublish.dart';
 import 'package:pawstic/components/textInput.dart';
 import "package:pawstic/globals.dart" as globals;
-import 'package:pawstic/publish2.dart';
+import 'package:pawstic/model/specie.dart';
+import 'package:pawstic/pages/publish/publish2.dart';
 import 'package:pawstic/service/createPublishService.dart';
 import "package:pawstic/service/createPublishService.dart"
     as createPublishService;
 import 'package:pawstic/theme.dart';
 
-import 'components/colorSelector.dart';
-import 'components/dropDownInputSpecies.dart';
-import 'model/specie.dart';
+import '../../components/colorSelector.dart';
+import '../../components/dropDownInputSpecies.dart';
 
 class Publish1 extends StatefulWidget {
   @override
