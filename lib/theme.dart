@@ -8,7 +8,7 @@ ThemeData defaultTheme = ThemeData(
     headline1: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
     headline4: TextStyle(
         fontFamily: 'PoppinsSemiBold',
-        fontSize: 16.0,
+        fontSize: 17.0,
         color: globals.titleColor),
     headline5: TextStyle(
         fontFamily: 'PoppinsBold', fontSize: 30.0, color: globals.titleColor),

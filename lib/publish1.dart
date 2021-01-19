@@ -37,6 +37,7 @@ class Publish1State extends State<Publish1> {
   void initState() {
     super.initState();
     dropdownSpecies = buildDropDownMenuItems(species_items);
+
     createPublishService.specieSelected = dropdownSpecies[0].value;
   }
 
@@ -91,17 +92,12 @@ class Publish1State extends State<Publish1> {
             RadioInputPublish(),
             SizedBox(height: 5),
             Padding(
-                padding: EdgeInsets.fromLTRB(35, 0, 30, 0),
-                child: Align(
+              padding: EdgeInsets.fromLTRB(35, 0, 30, 0),
+              child: Align(
                   alignment: Alignment.topLeft,
-                  child: Text(
-                    'Color',
-                    style: TextStyle(
-                        fontFamily: 'PoppinsSemiBold',
-                        fontSize: 17.0,
-                        color: globals.titleColor),
-                  ),
-                )),
+                  child: Text('Color',
+                      style: Theme.of(context).textTheme.headline4)),
+            ),
             SizedBox(height: 15),
             ColorSelector(),
             SizedBox(height: 25),

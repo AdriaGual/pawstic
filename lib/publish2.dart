@@ -14,7 +14,6 @@ import "package:pawstic/service/createPublishService.dart"
 import 'package:pawstic/service/createPublishService.dart';
 import 'package:pawstic/theme.dart';
 
-import 'model/imageFile.dart';
 import 'model/specie.dart';
 
 class Publish2 extends StatefulWidget {
@@ -29,7 +28,7 @@ class Publish2State extends State<Publish2> {
     final _image = await ImagePicker.pickImage(source: ImageSource.gallery);
 
     setState(() {
-      createPublishService.images.add(new ImageFile(UniqueKey(), _image));
+      createPublishService.images.add(_image);
     });
   }
 
@@ -37,7 +36,7 @@ class Publish2State extends State<Publish2> {
     final _image = await ImagePicker.pickImage(source: ImageSource.camera);
 
     setState(() {
-      createPublishService.images.add(new ImageFile(UniqueKey(), _image));
+      createPublishService.images.add(_image);
     });
   }
 
@@ -202,9 +201,9 @@ class Publish2State extends State<Publish2> {
                     padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
                     shrinkWrap: true,
                     itemBuilder: (BuildContext context, int i) {
-                      ImageFile item = createPublishService.images[i];
+                      File item = createPublishService.images[i];
                       return Stack(children: [
-                        ImageFileContainer(item.image),
+                        ImageFileContainer(item),
                         Positioned(
 //give the values according to your requirement
                             child: IconButton(

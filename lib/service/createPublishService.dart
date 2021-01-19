@@ -1,4 +1,5 @@
-import 'package:pawstic/model/imageFile.dart';
+import 'dart:io';
+
 import 'package:pawstic/model/specie.dart';
 
 enum Gender { macho, hembra }
@@ -10,5 +11,5 @@ Gender genderSelected = Gender.macho;
 Specie specieSelected = Specie(1, "Perro");
 int years = 1;
 int weight = 10;
-List<ImageFile> images = [];
+List<File> images = [];
 double lastGeneratedNumber = 2;
