@@ -50,7 +50,7 @@ class HorizontalCardState extends State<HorizontalCard> {
               height: this.heigth,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(16.0),
-                child: Image.asset(this.publish.imageUrl, fit: BoxFit.cover),
+                child: Image.network(this.publish.imageUrl, fit: BoxFit.cover),
               )),
           Container(
               width: this.width,
@@ -76,15 +76,26 @@ class HorizontalCardState extends State<HorizontalCard> {
                             child: FaIcon(FontAwesomeIcons.venus),
                           )
                       ]),
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: Text(
-                            this.publish.breed +
-                                ', ' +
-                                this.publish.years.toString() +
-                                ' años',
-                            style: Theme.of(context).textTheme.subtitle2),
-                      )
+                      if (this.publish.years != 1)
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                              this.publish.breed +
+                                  ', ' +
+                                  this.publish.years.toString() +
+                                  ' años',
+                              style: Theme.of(context).textTheme.subtitle2),
+                        )
+                      else
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                              this.publish.breed +
+                                  ', ' +
+                                  this.publish.years.toString() +
+                                  ' año',
+                              style: Theme.of(context).textTheme.subtitle2),
+                        )
                     ])),
                 Icon(
                   FeatherIcons.heart,

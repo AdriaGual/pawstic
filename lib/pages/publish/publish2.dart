@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:geolocator/geolocator.dart';
@@ -24,8 +25,8 @@ class Publish2State extends State<Publish2> {
   File image;
 
   Future getImageFromGallery() async {
-    PickedFile selectedFile =
-        await ImagePicker().getImage(source: ImageSource.gallery);
+    PickedFile selectedFile = await ImagePicker()
+        .getImage(source: ImageSource.gallery, imageQuality: 25);
     File _image = File(selectedFile.path);
 
     setState(() {
@@ -34,8 +35,8 @@ class Publish2State extends State<Publish2> {
   }
 
   Future getImageFromCamera() async {
-    PickedFile selectedFile =
-        await ImagePicker().getImage(source: ImageSource.camera);
+    PickedFile selectedFile = await ImagePicker()
+        .getImage(source: ImageSource.camera, imageQuality: 25);
     File _image = File(selectedFile.path);
 
     setState(() {
@@ -68,14 +69,24 @@ class Publish2State extends State<Publish2> {
     super.dispose();
   }
 
+  Future<String> uploadImage(File image) async {
+    var cloudinary = CloudinaryPublic('drws2krnb', 'uploadImage', cache: false);
+    CloudinaryResponse response = await cloudinary.uploadFile(
+      CloudinaryFile.fromFile(image.path,
+          resourceType: CloudinaryResourceType.Image),
+    );
+    createPublishService.imagesUploaded.add(response.secureUrl);
+    createPublish();
+  }
+
   void getCurrentLocation() async {
     await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
         .then((Position position) {
       setState(() {
         createPublishService.latitude = position.latitude;
         createPublishService.longitude = position.longitude;
-        createPublish();
       });
+      uploadImage(createPublishService.images[0]);
     }).catchError((e) {
       print(e);
     });
@@ -99,8 +110,14 @@ class Publish2State extends State<Publish2> {
         'species': createPublishService.specieSelected.id.toString(),
         'latitude': createPublishService.latitude.toString(),
         'longitude': createPublishService.longitude.toString(),
+        'imageUrl': createPublishService.imagesUploaded[0],
         "likedBy": "1,2"
       }),
+    );
+    createPublishService.clear();
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => MainWrapper(0)),
     );
   }
 
@@ -264,11 +281,6 @@ class Publish2State extends State<Publish2> {
                     child: FloatingActionButton.extended(
                       onPressed: () {
                         getCurrentLocation();
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => MainWrapper(0)),
-                        );
                       },
                       label: Text(
                         "Publicar",
