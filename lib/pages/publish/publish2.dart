@@ -91,7 +91,6 @@ class Publish2State extends State<Publish2> {
                           FeatherIcons.arrowLeft,
                           size: 30,
                         ),
-                        tooltip: 'go back',
                         onPressed: () {
                           Navigator.push(
                             context,
