@@ -18,6 +18,7 @@ class _MyStatefulWidgetState extends State<Init> {
 
   @override
   void initState() {
+    super.initState();
     log('init State');
     loadOnBoardingDone();
     onBoardingDone = false;

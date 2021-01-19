@@ -25,7 +25,9 @@ class Publish2State extends State<Publish2> {
   File image;
 
   Future getImageFromGallery() async {
-    final _image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    PickedFile selectedFile =
+        await ImagePicker().getImage(source: ImageSource.gallery);
+    File _image = File(selectedFile.path);
 
     setState(() {
       createPublishService.images.add(_image);
@@ -33,7 +35,9 @@ class Publish2State extends State<Publish2> {
   }
 
   Future getImageFromCamera() async {
-    final _image = await ImagePicker.pickImage(source: ImageSource.camera);
+    PickedFile selectedFile =
+        await ImagePicker().getImage(source: ImageSource.camera);
+    File _image = File(selectedFile.path);
 
     setState(() {
       createPublishService.images.add(_image);

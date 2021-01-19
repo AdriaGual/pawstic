@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import "package:pawstic/globals.dart" as globals;
 
 class TextInput extends StatefulWidget {
-  TextEditingController controller;
-  String text;
+  final TextEditingController controller;
+  final String text;
   TextInput(this.controller, this.text);
 
   @override

@@ -5,7 +5,7 @@ import "package:pawstic/service/createPublishService.dart"
     as createPublishService;
 
 class DropDownInputSpecies extends StatefulWidget {
-  List<DropdownMenuItem<Specie>> dropdownSpecies;
+  final List<DropdownMenuItem<Specie>> dropdownSpecies;
   DropDownInputSpecies(this.dropdownSpecies);
 
   @override

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 class ImageFileContainer extends StatelessWidget {
-  File item;
+  final File item;
   ImageFileContainer(this.item);
 
   @override

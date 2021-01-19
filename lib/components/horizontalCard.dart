@@ -4,11 +4,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pawstic/model/publish.dart';
 
 class HorizontalCard extends StatefulWidget {
-  Map initialPublish;
-  double width;
-  double secondWidth;
-  double secondHeight;
-  double heigth;
+  final Map initialPublish;
+  final double width;
+  final double secondWidth;
+  final double secondHeight;
+  final double heigth;
   HorizontalCard(this.initialPublish, this.width, this.secondWidth, this.heigth,
       this.secondHeight);
 

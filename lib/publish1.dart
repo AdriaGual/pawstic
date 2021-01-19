@@ -26,7 +26,7 @@ class Publish1State extends State<Publish1> {
   final breed = TextEditingController();
   List<DropdownMenuItem<Specie>> dropdownSpecies;
 
-  List<Specie> species_items = [
+  List<Specie> speciesItems = [
     Specie(1, "Perro"),
     Specie(2, "Gato"),
     Specie(3, "Conejo"),
@@ -36,7 +36,7 @@ class Publish1State extends State<Publish1> {
 
   void initState() {
     super.initState();
-    dropdownSpecies = buildDropDownMenuItems(species_items);
+    dropdownSpecies = buildDropDownMenuItems(speciesItems);
 
     createPublishService.specieSelected = dropdownSpecies[0].value;
   }

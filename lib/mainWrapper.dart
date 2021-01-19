@@ -9,7 +9,7 @@ import 'components/topBar.dart';
 import 'main.dart';
 
 class MainWrapper extends StatefulWidget {
-  int _selectedIndex = 0;
+  final int _selectedIndex;
   MainWrapper(this._selectedIndex);
 
   @override
@@ -37,6 +37,7 @@ class _MyStatefulWidgetState extends State<MainWrapper> {
 
   @override
   void initState() {
+    super.initState();
     setOnBoardingDone();
   }
 
