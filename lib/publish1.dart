@@ -63,124 +63,123 @@ class Publish1State extends State<Publish1> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Pawstic',
-        theme: defaultTheme,
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
-          body: SingleChildScrollView(
-            child: Column(
-              children: [
-                SizedBox(height: 20),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
-                    child: Container(
-                      child: Text('Publicar anuncio',
-                          textAlign: TextAlign.left,
-                          style: Theme.of(context).textTheme.headline5),
-                    ),
-                  ),
+      title: 'Pawstic',
+      theme: defaultTheme,
+      debugShowCheckedModeBanner: false,
+      home: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(height: 20),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
+                child: Container(
+                  child: Text('Publicar anuncio',
+                      textAlign: TextAlign.left,
+                      style: Theme.of(context).textTheme.headline5),
                 ),
-                SizedBox(height: 20),
-                TextInput(name, 'Nombre del animal'),
-                SizedBox(height: 15),
-                TextInput(breed, 'Raza'),
-                SizedBox(height: 15),
-                DropDownInputSpecies(dropdownSpecies),
-                SizedBox(height: 15),
-                RadioInputPublish(),
-                SizedBox(height: 5),
-                Padding(
-                    padding: EdgeInsets.fromLTRB(35, 0, 30, 0),
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        'Color',
+              ),
+            ),
+            SizedBox(height: 20),
+            TextInput(name, 'Nombre del animal'),
+            SizedBox(height: 15),
+            TextInput(breed, 'Raza'),
+            SizedBox(height: 15),
+            DropDownInputSpecies(dropdownSpecies),
+            SizedBox(height: 15),
+            RadioInputPublish(),
+            SizedBox(height: 5),
+            Padding(
+                padding: EdgeInsets.fromLTRB(35, 0, 30, 0),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    'Color',
+                    style: TextStyle(
+                        fontFamily: 'PoppinsSemiBold',
+                        fontSize: 17.0,
+                        color: globals.titleColor),
+                  ),
+                )),
+            SizedBox(height: 15),
+            ColorSelector(),
+            SizedBox(height: 25),
+            FloatingActionButton(
+              onPressed: () {
+                String genderName;
+                if (Gender.macho == createPublishService.genderSelected) {
+                  genderName = 'macho';
+                } else {
+                  genderName = 'hembra';
+                }
+                createPublishService.name = name.text;
+                createPublishService.breed = breed.text;
+                log('Nombre: ' + createPublishService.name);
+                log('Raza: ' + createPublishService.breed);
+                log('Especie: ' + createPublishService.specieSelected.name);
+                log('Genero: ' + genderName);
+                log('Color: ' + createPublishService.colorSelected);
+                if (breed.text.isEmpty || name.text.isEmpty) {
+                  showDialog(
+                    context: context,
+                    builder: (ctx) => AlertDialog(
+                      title: Text(
+                        'Tienes campos sin rellenar',
                         style: TextStyle(
                             fontFamily: 'PoppinsSemiBold',
-                            fontSize: 17.0,
+                            fontSize: 19.0,
                             color: globals.titleColor),
                       ),
-                    )),
-                SizedBox(height: 15),
-                ColorSelector(),
-                SizedBox(height: 25),
-                FloatingActionButton(
-                  onPressed: () {
-                    String genderName;
-                    if (Gender.macho == createPublishService.genderSelected) {
-                      genderName = 'macho';
-                    } else {
-                      genderName = 'hembra';
-                    }
-                    createPublishService.name = name.text;
-                    createPublishService.breed = breed.text;
-                    log('Nombre: ' + createPublishService.name);
-                    log('Raza: ' + createPublishService.breed);
-                    log('Especie: ' + createPublishService.specieSelected.name);
-                    log('Genero: ' + genderName);
-                    log('Color: ' + createPublishService.colorSelected);
-                    if (breed.text.isEmpty || name.text.isEmpty) {
-                      showDialog(
-                        context: context,
-                        builder: (ctx) => AlertDialog(
-                          title: Text(
-                            'Tienes campos sin rellenar',
-                            style: TextStyle(
-                                fontFamily: 'PoppinsSemiBold',
-                                fontSize: 19.0,
-                                color: globals.titleColor),
-                          ),
-                          content: SingleChildScrollView(
-                            child: ListBody(
-                              children: <Widget>[
-                                if (name.text.isEmpty)
-                                  Text('El campo Nombre es obligatorio',
-                                      style: TextStyle(
-                                          fontFamily: 'PoppinsRegular',
-                                          fontSize: 15.0,
-                                          color: globals.bodyColor)),
-                                if (breed.text.isEmpty)
-                                  Text('El campo Raza es obligatorio',
-                                      style: TextStyle(
-                                          fontFamily: 'PoppinsRegular',
-                                          fontSize: 15.0,
-                                          color: globals.bodyColor)),
-                              ],
-                            ),
-                          ),
-                          actions: <Widget>[
-                            TextButton(
-                              child: Text('Aceptar',
+                      content: SingleChildScrollView(
+                        child: ListBody(
+                          children: <Widget>[
+                            if (name.text.isEmpty)
+                              Text('El campo Nombre es obligatorio',
                                   style: TextStyle(
-                                      fontFamily: 'PoppinsSemiBold',
+                                      fontFamily: 'PoppinsRegular',
                                       fontSize: 15.0,
-                                      color: globals.primaryColor)),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
+                                      color: globals.bodyColor)),
+                            if (breed.text.isEmpty)
+                              Text('El campo Raza es obligatorio',
+                                  style: TextStyle(
+                                      fontFamily: 'PoppinsRegular',
+                                      fontSize: 15.0,
+                                      color: globals.bodyColor)),
                           ],
                         ),
-                      );
-                    } else {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Publish2()),
-                      );
-                    }
-                  },
-                  child: Icon(FeatherIcons.arrowRight),
-                  backgroundColor: globals.primaryColor,
-                ),
-                SizedBox(height: 30),
-                Image.asset(
-                  'assets/images/Publish/progressBarPublish1.png',
-                ),
-              ],
+                      ),
+                      actions: <Widget>[
+                        TextButton(
+                          child: Text('Aceptar',
+                              style: TextStyle(
+                                  fontFamily: 'PoppinsSemiBold',
+                                  fontSize: 15.0,
+                                  color: globals.primaryColor)),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                } else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Publish2()),
+                  );
+                }
+              },
+              child: Icon(FeatherIcons.arrowRight),
+              backgroundColor: globals.primaryColor,
             ),
-          ),
-        ));
+            SizedBox(height: 30),
+            Image.asset(
+              'assets/images/Publish/progressBarPublish1.png',
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
