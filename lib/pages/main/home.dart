@@ -17,7 +17,6 @@ class HomeState extends State<Home> {
   double yOffset = 0;
   double scaleFactor = 1;
 
-  bool isDrawerOpen = false;
   List<BoxShadow> shadowList = [
     BoxShadow(color: Colors.grey[300], blurRadius: 30, offset: Offset(0, 10))
   ];
@@ -26,14 +25,14 @@ class HomeState extends State<Home> {
     xOffset = 230;
     yOffset = 150;
     scaleFactor = 0.6;
-    isDrawerOpen = true;
+    globals.isDrawerOpen = true;
   }
 
   void closeDrawer() {
     xOffset = 0;
     yOffset = 0;
     scaleFactor = 1;
-    isDrawerOpen = false;
+    globals.isDrawerOpen = false;
   }
 
   List<Map> categories = [
@@ -56,15 +55,15 @@ class HomeState extends State<Home> {
     return AnimatedContainer(
       transform: Matrix4.translationValues(xOffset, yOffset, 0)
         ..scale(scaleFactor)
-        ..rotateY(isDrawerOpen ? -0.5 : 0),
+        ..rotateY(globals.isDrawerOpen ? -0.5 : 0),
       duration: Duration(milliseconds: 250),
       decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(isDrawerOpen ? 30 : 0.0)),
+          borderRadius: BorderRadius.circular(globals.isDrawerOpen ? 30 : 0.0)),
       child: SingleChildScrollView(
           child: GestureDetector(
         onTap: () {
-          if (isDrawerOpen) {
+          if (globals.isDrawerOpen) {
             setState(() {
               closeDrawer();
             });
@@ -78,7 +77,7 @@ class HomeState extends State<Home> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  isDrawerOpen
+                  globals.isDrawerOpen
                       ? IconButton(
                           padding: EdgeInsets.zero,
                           constraints: BoxConstraints(),

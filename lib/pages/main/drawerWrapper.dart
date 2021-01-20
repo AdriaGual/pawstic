@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:flutter_svg/svg.dart';
 import "package:pawstic/globals.dart" as globals;
 
 class DrawerWrapper extends StatefulWidget {
@@ -9,46 +10,24 @@ class DrawerWrapper extends StatefulWidget {
 
 class DrawerWrapperState extends State<DrawerWrapper> {
   List<Map> drawerItems = [
-    {'icon': FontAwesomeIcons.paw, 'title': 'Adoption'},
-    {'icon': Icons.mail, 'title': 'Donation'},
-    {'icon': FontAwesomeIcons.plus, 'title': 'Add pet'},
-    {'icon': Icons.favorite, 'title': 'Favorites'},
-    {'icon': Icons.mail, 'title': 'Messages'},
-    {'icon': FontAwesomeIcons.userAlt, 'title': 'Profile'},
+    {'icon': FeatherIcons.messageCircle, 'title': 'Mensajes'},
+    {'icon': FeatherIcons.archive, 'title': 'Mis anuncios'},
+    {'icon': FeatherIcons.creditCard, 'title': 'Donar'},
+    {'icon': FeatherIcons.user, 'title': 'Perfil'},
+    {'icon': FeatherIcons.settings, 'title': 'Configuración'},
   ];
   @override
   Widget build(BuildContext context) {
     return Container(
       color: globals.primaryColor,
-      padding: EdgeInsets.only(top: 50, bottom: 70, left: 10),
+      padding: EdgeInsets.only(top: 70, bottom: 40, left: 20),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            children: [
-              CircleAvatar(),
-              SizedBox(
-                width: 10,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Miroslava Savitskaya',
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
-                  ),
-                  Text('Active Status',
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold))
-                ],
-              )
-            ],
-          ),
           Column(
             children: drawerItems
                 .map((element) => Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(10.0),
                       child: Row(
                         children: [
                           Icon(
@@ -62,44 +41,36 @@ class DrawerWrapperState extends State<DrawerWrapper> {
                           Text(element['title'],
                               style: TextStyle(
                                   color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20))
+                                  fontFamily: 'PoppinsSemiBold',
+                                  fontSize: 18))
                         ],
                       ),
                     ))
                 .toList(),
           ),
-          Row(
-            children: [
-              Icon(
-                Icons.settings,
-                color: Colors.white,
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Text(
-                'Settings',
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Container(
-                width: 2,
-                height: 20,
-                color: Colors.white,
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Text(
-                'Log out',
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-              )
-            ],
+          Padding(
+            padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+            child: Row(
+              children: [
+                Text(
+                  'Sobre nosotros',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'PoppinsSemiBold',
+                      fontSize: 15),
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+                  child: SvgPicture.asset(
+                    'assets/images/white_logo.svg',
+                    height: 30.0,
+                  ),
+                )
+              ],
+            ),
           )
         ],
       ),
