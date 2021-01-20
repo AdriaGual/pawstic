@@ -6,6 +6,8 @@ import 'package:pawstic/globals.dart' as globals;
 ThemeData defaultTheme = ThemeData(
   textTheme: TextTheme(
     headline1: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
+    headline3: TextStyle(
+        fontFamily: 'PoppinsBold', fontSize: 40.0, color: globals.titleColor),
     headline4: TextStyle(
         fontFamily: 'PoppinsSemiBold',
         fontSize: 17.0,

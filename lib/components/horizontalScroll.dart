@@ -16,7 +16,6 @@ class HorizontalScroll extends StatefulWidget {
 
 class HorizontalScrollState extends State<HorizontalScroll> {
   List<dynamic> publishings = [];
-  List<dynamic> showPublishings = [];
   @override
   void initState() {
     super.initState();
