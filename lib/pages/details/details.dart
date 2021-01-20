@@ -23,7 +23,6 @@ class DetailsState extends State<Details> {
   @override
   void initState() {
     super.initState();
-    log(publish.name);
     images = this.publish.imageUrl.split(',');
   }
 
@@ -228,6 +227,7 @@ class DetailsState extends State<Details> {
                                   width: 200.0,
                                   height: 60.0,
                                   child: FloatingActionButton.extended(
+                                    heroTag: "btn1",
                                     onPressed: () {},
                                     label: Text(
                                       "Adoptar",
@@ -241,6 +241,7 @@ class DetailsState extends State<Details> {
                                 ),
                                 Spacer(),
                                 FloatingActionButton(
+                                  heroTag: "btn2",
                                   onPressed: () {},
                                   child: Icon(FeatherIcons.upload),
                                   backgroundColor: globals.primaryColor,
