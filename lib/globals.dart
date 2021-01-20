@@ -14,6 +14,23 @@ Color meatColor = HexColor.fromHex('#FCCEB2');
 String allPublishingsUrl = 'http://192.168.1.42:3000/publishings/';
 int selectedIndex = 0;
 bool isDrawerOpen = false;
+double xOffset = 0;
+double yOffset = 0;
+double scaleFactor = 1;
+
+void openDrawer() {
+  xOffset = 230;
+  yOffset = 150;
+  scaleFactor = 0.6;
+  isDrawerOpen = true;
+}
+
+void closeDrawer() {
+  xOffset = 0;
+  yOffset = 0;
+  scaleFactor = 1;
+  isDrawerOpen = false;
+}
 
 extension HexColor on Color {
   /// String is in the format "aabbcc" or "ffaabbcc" with an optional leading "#".

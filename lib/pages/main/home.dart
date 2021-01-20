@@ -13,26 +13,18 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home> {
-  double xOffset = 0;
-  double yOffset = 0;
-  double scaleFactor = 1;
-
   List<BoxShadow> shadowList = [
     BoxShadow(color: Colors.grey[300], blurRadius: 30, offset: Offset(0, 10))
   ];
 
-  void openDrawer() {
-    xOffset = 230;
-    yOffset = 150;
-    scaleFactor = 0.6;
-    globals.isDrawerOpen = true;
-  }
-
-  void closeDrawer() {
-    xOffset = 0;
-    yOffset = 0;
-    scaleFactor = 1;
-    globals.isDrawerOpen = false;
+  @override
+  void initState() {
+    super.initState();
+    if (globals.isDrawerOpen) {
+      globals.openDrawer();
+    } else {
+      globals.closeDrawer();
+    }
   }
 
   List<Map> categories = [
@@ -53,8 +45,8 @@ class HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
-      transform: Matrix4.translationValues(xOffset, yOffset, 0)
-        ..scale(scaleFactor)
+      transform: Matrix4.translationValues(globals.xOffset, globals.yOffset, 0)
+        ..scale(globals.scaleFactor)
         ..rotateY(globals.isDrawerOpen ? -0.5 : 0),
       duration: Duration(milliseconds: 250),
       decoration: BoxDecoration(
@@ -65,7 +57,7 @@ class HomeState extends State<Home> {
         onTap: () {
           if (globals.isDrawerOpen) {
             setState(() {
-              closeDrawer();
+              globals.closeDrawer();
             });
           }
         },
@@ -75,7 +67,6 @@ class HomeState extends State<Home> {
                 child: Padding(
               padding: EdgeInsets.fromLTRB(30, 30, 30, 20),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   globals.isDrawerOpen
                       ? IconButton(
@@ -84,7 +75,7 @@ class HomeState extends State<Home> {
                           icon: Icon(FeatherIcons.arrowLeft),
                           onPressed: () {
                             setState(() {
-                              closeDrawer();
+                              globals.closeDrawer();
                             });
                           },
                         )
@@ -94,7 +85,7 @@ class HomeState extends State<Home> {
                           icon: Icon(FeatherIcons.menu),
                           onPressed: () {
                             setState(() {
-                              openDrawer();
+                              globals.openDrawer();
                             });
                           }),
                   Spacer(),

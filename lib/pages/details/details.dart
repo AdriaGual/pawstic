@@ -59,6 +59,7 @@ class DetailsState extends State<Details> {
                     ),
                     onPressed: () {
                       globals.selectedIndex = 0;
+                      globals.isDrawerOpen = false;
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => HomeWrapper()),

@@ -16,6 +16,7 @@ class HomeWrapperState extends State<HomeWrapper> {
   void _onItemTapped(int index) {
     setState(() {
       globals.selectedIndex = index;
+      globals.closeDrawer();
     });
   }
 
