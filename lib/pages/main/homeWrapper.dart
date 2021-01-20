@@ -1,61 +1,31 @@
-/// This is the stateful widget that the main application instantiates.
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import "package:pawstic/globals.dart" as globals;
-import 'package:pawstic/pages/publish/publish1.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import 'components/topBar.dart';
-import 'main.dart';
+import 'drawerWrapper.dart';
+import 'home.dart';
 
-class MainWrapper extends StatefulWidget {
-  final int _selectedIndex;
-  MainWrapper(this._selectedIndex);
+class HomeWrapper extends StatefulWidget {
+  HomeWrapper();
 
   @override
-  _MyStatefulWidgetState createState() =>
-      _MyStatefulWidgetState(this._selectedIndex);
+  HomeWrapperState createState() => HomeWrapperState();
 }
 
-class _MyStatefulWidgetState extends State<MainWrapper> {
-  int _selectedIndex = 0;
-  _MyStatefulWidgetState(this._selectedIndex);
-
-  static List<Widget> _widgetOptions = <Widget>[
-    Main(),
-    Publish1(),
-    Text(
-      'Index 2: School',
-    ),
-  ];
-
+class HomeWrapperState extends State<HomeWrapper> {
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    setOnBoardingDone();
-  }
-
-  setOnBoardingDone() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      prefs.setBool('onBoardingDone', true);
+      globals.selectedIndex = index;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(children: [
-          SizedBox(height: 50),
-          TopBar(),
-          Expanded(child: _widgetOptions.elementAt(_selectedIndex))
-        ]),
+        body: SafeArea(
+            child: Stack(
+          children: [DrawerWrapper(), Home()],
+        )),
         bottomNavigationBar: Padding(
           padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
           child: BottomNavigationBar(
@@ -84,7 +54,7 @@ class _MyStatefulWidgetState extends State<MainWrapper> {
                 label: 'Favorites',
               ),
             ],
-            currentIndex: _selectedIndex,
+            currentIndex: globals.selectedIndex,
             unselectedItemColor: globals.titleColor,
             selectedItemColor: globals.primaryColor,
             onTap: _onItemTapped,
