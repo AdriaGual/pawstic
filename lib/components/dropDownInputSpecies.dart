@@ -19,30 +19,27 @@ class DropDownInputSpeciesState extends State<DropDownInputSpecies> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
-      child: Container(
-        width: 400.0,
-        height: 65.0,
-        padding: EdgeInsets.all(20.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12.0),
-          color: globals.fillGreyColor,
-        ),
-        child: DropdownButtonHideUnderline(
-          child: DropdownButton(
-            value: createPublishService.specieSelected,
-            items: dropdownSpecies,
-            onChanged: (value) {
-              setState(() {
-                createPublishService.specieSelected = value;
-              });
-            },
-            style: TextStyle(
-                fontFamily: 'PoppinsRegular',
-                fontSize: 17.0,
-                color: globals.titleColor),
-          ),
+    return Container(
+      width: 400.0,
+      height: 65.0,
+      padding: EdgeInsets.all(20.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12.0),
+        color: globals.fillGreyColor,
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton(
+          value: createPublishService.specieSelected,
+          items: dropdownSpecies,
+          onChanged: (value) {
+            setState(() {
+              createPublishService.specieSelected = value;
+            });
+          },
+          style: TextStyle(
+              fontFamily: 'PoppinsRegular',
+              fontSize: 17.0,
+              color: globals.titleColor),
         ),
       ),
     );

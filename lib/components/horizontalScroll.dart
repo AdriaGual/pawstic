@@ -40,7 +40,7 @@ class HorizontalScrollState extends State<HorizontalScroll> {
     return Padding(
       padding: EdgeInsets.fromLTRB(30, 10, 0, 0),
       child: Container(
-        height: 240.0,
+        height: 230.0,
         child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: publishings.length,

@@ -29,36 +29,26 @@ class HorizontalScrollVariantState extends State<HorizontalScrollVariant> {
     });
   }
 
-  Future<void> _getData() async {
-    fetchPublishings();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return publishings.length != 0
-        ? RefreshIndicator(
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(30, 10, 0, 0),
-              child: Container(
-                height: 350.0,
-                child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    shrinkWrap: true,
-                    itemCount: publishings.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Row(
-                        children: <Widget>[
-                          if (Publish.fromJson(publishings[index]).imageUrl !=
-                              null)
-                            HorizontalCard(
-                                publishings[index], 200.0, 170.0, 250.0, 100.0),
-                        ],
-                      );
-                    }),
-              ),
-            ),
-            onRefresh: _getData,
-          )
-        : Center(child: CircularProgressIndicator());
+    return Padding(
+      padding: EdgeInsets.fromLTRB(30, 10, 0, 0),
+      child: Container(
+        height: 350.0,
+        child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            shrinkWrap: true,
+            itemCount: publishings.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Row(
+                children: <Widget>[
+                  if (Publish.fromJson(publishings[index]).imageUrl != null)
+                    HorizontalCard(
+                        publishings[index], 200.0, 170.0, 250.0, 100.0),
+                ],
+              );
+            }),
+      ),
+    );
   }
 }

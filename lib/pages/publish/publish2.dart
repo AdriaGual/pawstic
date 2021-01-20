@@ -10,8 +10,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:pawstic/components/imageFileContainer.dart';
 import "package:pawstic/globals.dart" as globals;
-import 'package:pawstic/mainWrapper.dart';
 import 'package:pawstic/model/specie.dart';
+import 'package:pawstic/pages/main/homeWrapper.dart';
 import "package:pawstic/service/createPublishService.dart"
     as createPublishService;
 import 'package:pawstic/service/createPublishService.dart';
@@ -117,9 +117,10 @@ class Publish2State extends State<Publish2> {
       }),
     );
     createPublishService.clear();
+    globals.selectedIndex = 0;
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => MainWrapper(0)),
+      MaterialPageRoute(builder: (context) => HomeWrapper()),
     );
   }
 
@@ -147,10 +148,11 @@ class Publish2State extends State<Publish2> {
                           size: 30,
                         ),
                         onPressed: () {
+                          globals.selectedIndex = 1;
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => MainWrapper(1)),
+                                builder: (context) => HomeWrapper()),
                           );
                         },
                       ),

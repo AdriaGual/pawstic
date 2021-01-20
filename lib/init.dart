@@ -47,7 +47,7 @@ class _MyStatefulWidgetState extends State<Init> {
       title: 'Pawstic',
       theme: defaultTheme,
       home: onBoardingDone != null && onBoardingDone
-          ? MainWrapper()
+          ? HomeWrapper()
           : OnBoarding1(),
     );
   }*/

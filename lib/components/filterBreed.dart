@@ -5,7 +5,7 @@ class FilterBreed extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
+      padding: EdgeInsets.fromLTRB(30, 20, 30, 10),
       child: Row(
         children: [
           Text('Perros',

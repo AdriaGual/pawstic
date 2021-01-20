@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:pawstic/globals.dart" as globals;
-
-import '../../mainWrapper.dart';
+import 'package:pawstic/pages/main/homeWrapper.dart';
 
 class OnBoarding3 extends StatelessWidget {
   @override
@@ -35,9 +34,10 @@ class OnBoarding3 extends StatelessWidget {
               height: 60.0,
               child: FloatingActionButton.extended(
                 onPressed: () {
+                  globals.selectedIndex = 0;
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => MainWrapper(0)),
+                    MaterialPageRoute(builder: (context) => HomeWrapper()),
                   );
                 },
                 label: Row(

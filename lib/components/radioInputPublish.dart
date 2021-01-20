@@ -16,50 +16,48 @@ class RadioInputPublishState extends State<RadioInputPublish> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: EdgeInsets.fromLTRB(20, 0, 30, 0),
-        child: Row(children: <Widget>[
-          Expanded(
-              child: ListTile(
-            title: Radio(
-              activeColor: globals.primaryColor,
-              value: Gender.macho,
-              groupValue: createPublishService.genderSelected,
-              onChanged: (Gender value) {
-                setState(() {
-                  createPublishService.genderSelected = value;
-                });
-              },
-            ),
-            leading: Text(
-              'Macho',
-              style: TextStyle(
-                  fontFamily: 'PoppinsSemiBold',
-                  fontSize: 17.0,
-                  color: globals.titleColor),
-            ),
-          )),
-          Expanded(
-            child: ListTile(
-              title: Radio(
-                activeColor: globals.primaryColor,
-                value: Gender.hembra,
-                groupValue: createPublishService.genderSelected,
-                onChanged: (Gender value) {
-                  setState(() {
-                    createPublishService.genderSelected = value;
-                  });
-                },
-              ),
-              leading: Text(
-                'Hembra',
-                style: TextStyle(
-                    fontFamily: 'PoppinsSemiBold',
-                    fontSize: 17.0,
-                    color: globals.titleColor),
-              ),
-            ),
-          )
-        ]));
+    return Row(children: <Widget>[
+      Expanded(
+          child: ListTile(
+        title: Radio(
+          activeColor: globals.primaryColor,
+          value: Gender.macho,
+          groupValue: createPublishService.genderSelected,
+          onChanged: (Gender value) {
+            setState(() {
+              createPublishService.genderSelected = value;
+            });
+          },
+        ),
+        leading: Text(
+          'Macho',
+          style: TextStyle(
+              fontFamily: 'PoppinsSemiBold',
+              fontSize: 17.0,
+              color: globals.titleColor),
+        ),
+      )),
+      Expanded(
+        child: ListTile(
+          title: Radio(
+            activeColor: globals.primaryColor,
+            value: Gender.hembra,
+            groupValue: createPublishService.genderSelected,
+            onChanged: (Gender value) {
+              setState(() {
+                createPublishService.genderSelected = value;
+              });
+            },
+          ),
+          leading: Text(
+            'Hembra',
+            style: TextStyle(
+                fontFamily: 'PoppinsSemiBold',
+                fontSize: 17.0,
+                color: globals.titleColor),
+          ),
+        ),
+      )
+    ]);
   }
 }

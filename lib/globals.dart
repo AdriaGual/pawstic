@@ -1,7 +1,5 @@
 import 'dart:ui';
 
-import 'model/publish.dart';
-
 Color bodyColor = HexColor.fromHex('#4E4B66');
 Color titleColor = HexColor.fromHex('#14142B');
 Color primaryColor = HexColor.fromHex('#FF6D59');
@@ -13,9 +11,8 @@ Color greyColor_2 = HexColor.fromHex('#767676');
 Color beigeColor = HexColor.fromHex('#AE9C8B');
 Color meatColor = HexColor.fromHex('#FCCEB2');
 
-List<Publish> futurePublishings;
 String allPublishingsUrl = 'http://192.168.1.42:3000/publishings/';
-List<dynamic> publishings = [];
+int selectedIndex = 0;
 
 extension HexColor on Color {
   /// String is in the format "aabbcc" or "ffaabbcc" with an optional leading "#".

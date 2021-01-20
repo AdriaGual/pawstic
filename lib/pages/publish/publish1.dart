@@ -9,7 +9,6 @@ import 'package:pawstic/model/specie.dart';
 import 'package:pawstic/pages/publish/publish2.dart';
 import "package:pawstic/service/createPublishService.dart"
     as createPublishService;
-import 'package:pawstic/theme.dart';
 
 import '../../components/colorSelector.dart';
 import '../../components/dropDownInputSpecies.dart';
@@ -61,108 +60,98 @@ class Publish1State extends State<Publish1> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Pawstic',
-      theme: defaultTheme,
-      debugShowCheckedModeBanner: false,
-      home: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(height: 20),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
-                child: Container(
-                  child: Text('Publicar anuncio',
-                      textAlign: TextAlign.left,
-                      style: Theme.of(context).textTheme.headline5),
-                ),
-              ),
+    return SingleChildScrollView(
+        child: Padding(
+      padding: EdgeInsets.fromLTRB(30, 0, 30, 30),
+      child: Column(
+        children: [
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Container(
+              child: Text('Publicar anuncio',
+                  textAlign: TextAlign.left,
+                  style: Theme.of(context).textTheme.headline5),
             ),
-            SizedBox(height: 20),
-            TextInput(name, 'Nombre del animal'),
-            SizedBox(height: 15),
-            TextInput(breed, 'Raza'),
-            SizedBox(height: 15),
-            DropDownInputSpecies(dropdownSpecies),
-            SizedBox(height: 15),
-            RadioInputPublish(),
-            SizedBox(height: 5),
-            Padding(
-              padding: EdgeInsets.fromLTRB(35, 0, 30, 0),
-              child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Text('Color',
-                      style: Theme.of(context).textTheme.headline4)),
-            ),
-            SizedBox(height: 15),
-            ColorSelector(),
-            SizedBox(height: 25),
-            FloatingActionButton(
-              onPressed: () {
-                createPublishService.name = name.text;
-                createPublishService.breed = breed.text;
-                if (breed.text.isEmpty || name.text.isEmpty) {
-                  showDialog(
-                    context: context,
-                    builder: (ctx) => AlertDialog(
-                      title: Text(
-                        'Tienes campos sin rellenar',
-                        style: TextStyle(
-                            fontFamily: 'PoppinsSemiBold',
-                            fontSize: 19.0,
-                            color: globals.titleColor),
-                      ),
-                      content: SingleChildScrollView(
-                        child: ListBody(
-                          children: <Widget>[
-                            if (name.text.isEmpty)
-                              Text('El campo Nombre es obligatorio',
-                                  style: TextStyle(
-                                      fontFamily: 'PoppinsRegular',
-                                      fontSize: 15.0,
-                                      color: globals.bodyColor)),
-                            if (breed.text.isEmpty)
-                              Text('El campo Raza es obligatorio',
-                                  style: TextStyle(
-                                      fontFamily: 'PoppinsRegular',
-                                      fontSize: 15.0,
-                                      color: globals.bodyColor)),
-                          ],
-                        ),
-                      ),
-                      actions: <Widget>[
-                        TextButton(
-                          child: Text('Aceptar',
-                              style: TextStyle(
-                                  fontFamily: 'PoppinsSemiBold',
-                                  fontSize: 15.0,
-                                  color: globals.primaryColor)),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ],
+          ),
+          SizedBox(height: 20),
+          TextInput(name, 'Nombre del animal'),
+          SizedBox(height: 15),
+          TextInput(breed, 'Raza'),
+          SizedBox(height: 15),
+          DropDownInputSpecies(dropdownSpecies),
+          SizedBox(height: 15),
+          RadioInputPublish(),
+          SizedBox(height: 5),
+          Align(
+              alignment: Alignment.topLeft,
+              child:
+                  Text('Color', style: Theme.of(context).textTheme.headline4)),
+          SizedBox(height: 15),
+          ColorSelector(),
+          SizedBox(height: 25),
+          FloatingActionButton(
+            onPressed: () {
+              createPublishService.name = name.text;
+              createPublishService.breed = breed.text;
+              if (breed.text.isEmpty || name.text.isEmpty) {
+                showDialog(
+                  context: context,
+                  builder: (ctx) => AlertDialog(
+                    title: Text(
+                      'Tienes campos sin rellenar',
+                      style: TextStyle(
+                          fontFamily: 'PoppinsSemiBold',
+                          fontSize: 19.0,
+                          color: globals.titleColor),
                     ),
-                  );
-                } else {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Publish2()),
-                  );
-                }
-              },
-              child: Icon(FeatherIcons.arrowRight),
-              backgroundColor: globals.primaryColor,
-            ),
-            SizedBox(height: 30),
-            Image.asset(
-              'assets/images/Publish/progressBarPublish1.png',
-            ),
-          ],
-        ),
+                    content: SingleChildScrollView(
+                      child: ListBody(
+                        children: <Widget>[
+                          if (name.text.isEmpty)
+                            Text('El campo Nombre es obligatorio',
+                                style: TextStyle(
+                                    fontFamily: 'PoppinsRegular',
+                                    fontSize: 15.0,
+                                    color: globals.bodyColor)),
+                          if (breed.text.isEmpty)
+                            Text('El campo Raza es obligatorio',
+                                style: TextStyle(
+                                    fontFamily: 'PoppinsRegular',
+                                    fontSize: 15.0,
+                                    color: globals.bodyColor)),
+                        ],
+                      ),
+                    ),
+                    actions: <Widget>[
+                      TextButton(
+                        child: Text('Aceptar',
+                            style: TextStyle(
+                                fontFamily: 'PoppinsSemiBold',
+                                fontSize: 15.0,
+                                color: globals.primaryColor)),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Publish2()),
+                );
+              }
+            },
+            child: Icon(FeatherIcons.arrowRight),
+            backgroundColor: globals.primaryColor,
+          ),
+          SizedBox(height: 30),
+          Image.asset(
+            'assets/images/Publish/progressBarPublish1.png',
+          ),
+        ],
       ),
-    );
+    ));
   }
 }
