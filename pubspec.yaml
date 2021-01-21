@@ -69,6 +69,7 @@ flutter:
     - assets/images/white_logo.svg
     - assets/images/Publish/progressBarPublish1.png
     - assets/images/Publish/progressBarPublish2.png
+    - assets/images/login/login.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
