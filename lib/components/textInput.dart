@@ -4,11 +4,12 @@ import "package:pawstic/globals.dart" as globals;
 class TextInput extends StatefulWidget {
   final TextEditingController controller;
   final String text;
-  TextInput(this.controller, this.text);
+  final bool obscureText;
+  TextInput(this.controller, this.text, this.obscureText);
 
   @override
   State<StatefulWidget> createState() =>
-      TextInputState(this.controller, this.text);
+      TextInputState(this.controller, this.text, this.obscureText);
 }
 
 String validateField(String value) {
@@ -21,13 +22,15 @@ String validateField(String value) {
 class TextInputState extends State<TextInput> {
   TextEditingController controller;
   String text;
-  TextInputState(this.controller, this.text);
+  bool obscureText;
+  TextInputState(this.controller, this.text, this.obscureText);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: this.controller,
       cursorColor: globals.primaryColor,
+      obscureText: this.obscureText,
       style: TextStyle(
           fontFamily: 'PoppinsRegular',
           fontSize: 17.0,

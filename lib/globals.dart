@@ -12,6 +12,7 @@ Color beigeColor = HexColor.fromHex('#AE9C8B');
 Color meatColor = HexColor.fromHex('#FCCEB2');
 
 String allPublishingsUrl = 'http://192.168.1.42:3000/publishings/';
+String allUsersUrl = 'http://192.168.1.42:3000/users/';
 int selectedIndex = 0;
 bool isDrawerOpen = false;
 double xOffset = 0;

@@ -134,10 +134,9 @@ class Publish2State extends State<Publish2> {
           body: SafeArea(
               child: SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.fromLTRB(0, 0, 0, 30),
+              padding: EdgeInsets.fromLTRB(0, 25, 0, 30),
               child: Column(
                 children: [
-                  SizedBox(height: 25),
                   Padding(
                     padding: EdgeInsets.fromLTRB(15, 0, 30, 0),
                     child: Align(

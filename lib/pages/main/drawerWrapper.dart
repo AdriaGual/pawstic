@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:pawstic/components/drawerItem.dart';
 import "package:pawstic/globals.dart" as globals;
+import 'package:pawstic/pages/login/login.dart';
 
 class DrawerWrapper extends StatefulWidget {
   @override
@@ -25,28 +27,17 @@ class DrawerWrapperState extends State<DrawerWrapper> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Column(
-            children: drawerItems
-                .map((element) => Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Row(
-                        children: [
-                          Icon(
-                            element['icon'],
-                            color: Colors.white,
-                            size: 30,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(element['title'],
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: 'PoppinsSemiBold',
-                                  fontSize: 18))
-                        ],
-                      ),
-                    ))
-                .toList(),
+            children: [
+              InkWell(
+                  onTap: () {
+                    globals.isDrawerOpen = false;
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Login()),
+                    );
+                  },
+                  child: DrawerItem('Iniciar sesión', FeatherIcons.logIn))
+            ],
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
