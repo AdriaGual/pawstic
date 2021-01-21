@@ -23,6 +23,7 @@ class Publish2 extends StatefulWidget {
 }
 
 class Publish2State extends State<Publish2> {
+  ProgressDialog progressDialog;
   void initState() {
     super.initState();
     createPublishService.years = 1;
@@ -118,6 +119,7 @@ class Publish2State extends State<Publish2> {
     );
     createPublishService.clear();
     globals.selectedIndex = 0;
+    progressDialog.dismiss();
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => HomeWrapper()),
@@ -283,7 +285,7 @@ class Publish2State extends State<Publish2> {
                     height: 60.0,
                     child: FloatingActionButton.extended(
                       onPressed: () async {
-                        ProgressDialog progressDialog = ProgressDialog(
+                        progressDialog = ProgressDialog(
                           context,
                           blur: 0,
                           onDismiss: () {
@@ -302,10 +304,6 @@ class Publish2State extends State<Publish2> {
                         progressDialog.show();
 
                         getCurrentLocation();
-
-                        await Future.delayed(Duration(seconds: 1));
-
-                        progressDialog.dismiss();
                       },
                       label: Text(
                         "Publicar",
