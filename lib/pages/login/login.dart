@@ -1,10 +1,14 @@
+import 'dart:convert';
 import 'dart:core';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:http/http.dart' as http;
 import 'package:pawstic/components/textInput.dart';
 import "package:pawstic/globals.dart" as globals;
+import 'package:pawstic/pages/login/forgotPassword.dart';
+import 'package:pawstic/pages/login/register.dart';
 import 'package:pawstic/pages/main/homeWrapper.dart';
 
 import '../../theme.dart';
@@ -39,6 +43,24 @@ class LoginState extends State<Login> {
     // we trim to remove trailing white spaces
   }
 
+  Future<Null> loginUser() async {
+    var response = await http.post(
+      globals.loginUrl,
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(<String, String>{
+        'email': name.text,
+        'password': password.text,
+      }),
+    );
+    final Map parsed = json.decode(response.body);
+    if (parsed['ok']) {
+      //Guardar el login amb la userId
+      //Redireccionar al wrapper
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -46,6 +68,7 @@ class LoginState extends State<Login> {
       theme: defaultTheme,
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: SafeArea(
             child: Stack(alignment: Alignment.center, children: [
           Positioned(
@@ -56,7 +79,7 @@ class LoginState extends State<Login> {
                 fit: BoxFit.cover,
               )),
           Padding(
-              padding: EdgeInsets.fromLTRB(30, 30, 30, 20),
+              padding: EdgeInsets.fromLTRB(30, 30, 30, 30),
               child: Column(
                 children: [
                   Row(children: [
@@ -101,12 +124,21 @@ class LoginState extends State<Login> {
                   SizedBox(height: 15),
                   Align(
                     alignment: Alignment.topRight,
-                    child: Text(
-                      "¿has olvidado la contraseña?",
-                      style: TextStyle(
-                          fontFamily: 'PoppinsSemiBold',
-                          fontSize: 14.0,
-                          color: globals.bodyColor),
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ForgotPassword()),
+                        );
+                      },
+                      child: Text(
+                        "¿has olvidado la contraseña?",
+                        style: TextStyle(
+                            fontFamily: 'PoppinsSemiBold',
+                            fontSize: 14.0,
+                            color: globals.bodyColor),
+                      ),
                     ),
                   ),
                   SizedBox(height: 20),
@@ -115,12 +147,14 @@ class LoginState extends State<Login> {
                     height: 60.0,
                     child: FloatingActionButton.extended(
                       onPressed: () {
-                        globals.selectedIndex = 0;
+                        /* globals.selectedIndex = 0;
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => HomeWrapper()),
-                        );
+
+                        );*/
+                        loginUser();
                       },
                       label: Text(
                         "Entrar",
@@ -145,13 +179,22 @@ class LoginState extends State<Login> {
                               color: globals.bodyColor),
                         ),
                         Spacer(),
-                        Text(
-                          "Regístrate aquí",
-                          style: TextStyle(
-                              fontFamily: 'PoppinsSemiBold',
-                              fontSize: 18.0,
-                              color: globals.primaryColor),
-                        ),
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Register()),
+                            );
+                          },
+                          child: Text(
+                            "Regístrate aquí",
+                            style: TextStyle(
+                                fontFamily: 'PoppinsSemiBold',
+                                fontSize: 18.0,
+                                color: globals.primaryColor),
+                          ),
+                        )
                       ],
                     ),
                   )),

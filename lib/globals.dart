@@ -13,6 +13,7 @@ Color meatColor = HexColor.fromHex('#FCCEB2');
 
 String allPublishingsUrl = 'http://192.168.1.42:3000/publishings/';
 String allUsersUrl = 'http://192.168.1.42:3000/users/';
+String loginUrl = 'http://192.168.1.42:3000/users/login';
 int selectedIndex = 0;
 bool isDrawerOpen = false;
 double xOffset = 0;
