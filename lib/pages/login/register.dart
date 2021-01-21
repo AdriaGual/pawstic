@@ -7,6 +7,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:pawstic/components/textInput.dart';
 import "package:pawstic/globals.dart" as globals;
+import 'package:pawstic/pages/main/homeWrapper.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../theme.dart';
 import 'login.dart';
@@ -58,9 +60,9 @@ class RegisterState extends State<Register> {
     // we trim to remove trailing white spaces
   }
 
-  void createAccount() {
+  Future<Null> createAccount() async {
     if (isEmailAddressValid(email.text)) {
-      http.post(
+      var response = await http.post(
         globals.allUsersUrl,
         headers: <String, String>{
           'Content-Type': 'application/json',
@@ -70,6 +72,14 @@ class RegisterState extends State<Register> {
           'email': email.text,
           'password': password.text,
         }),
+      );
+      final Map parsed = json.decode(response.body);
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setString('userId', parsed['_id']);
+      globals.selectedIndex = 0;
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => HomeWrapper()),
       );
     }
   }

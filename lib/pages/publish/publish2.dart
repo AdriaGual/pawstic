@@ -303,7 +303,7 @@ class Publish2State extends State<Publish2> {
 
                         getCurrentLocation();
 
-                        await Future.delayed(Duration(seconds: 5));
+                        await Future.delayed(Duration(seconds: 1));
 
                         progressDialog.dismiss();
                       },

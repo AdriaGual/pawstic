@@ -10,6 +10,7 @@ import "package:pawstic/globals.dart" as globals;
 import 'package:pawstic/pages/login/forgotPassword.dart';
 import 'package:pawstic/pages/login/register.dart';
 import 'package:pawstic/pages/main/homeWrapper.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../theme.dart';
 
@@ -56,8 +57,42 @@ class LoginState extends State<Login> {
     );
     final Map parsed = json.decode(response.body);
     if (parsed['ok']) {
-      //Guardar el login amb la userId
-      //Redireccionar al wrapper
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setString('userId', parsed['usuario']['_id']);
+      globals.selectedIndex = 0;
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => HomeWrapper()),
+      );
+    } else {
+      showDialog(
+          context: context,
+          builder: (_) => new AlertDialog(
+                title: new Text(
+                  "Campos no válidos",
+                  style: TextStyle(
+                      fontFamily: 'PoppinsSemiBold',
+                      fontSize: 19.0,
+                      color: globals.titleColor),
+                ),
+                content: new Text("Email y/o contraseña no válidos.",
+                    style: TextStyle(
+                        fontFamily: 'PoppinsRegular',
+                        fontSize: 15.0,
+                        color: globals.bodyColor)),
+                actions: <Widget>[
+                  TextButton(
+                    child: Text('Aceptar',
+                        style: TextStyle(
+                            fontFamily: 'PoppinsSemiBold',
+                            fontSize: 15.0,
+                            color: globals.primaryColor)),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ));
     }
   }
 
@@ -146,14 +181,7 @@ class LoginState extends State<Login> {
                     width: 200.0,
                     height: 60.0,
                     child: FloatingActionButton.extended(
-                      onPressed: () {
-                        /* globals.selectedIndex = 0;
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => HomeWrapper()),
-
-                        );*/
+                      onPressed: () async {
                         loginUser();
                       },
                       label: Text(

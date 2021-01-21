@@ -4,6 +4,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:pawstic/components/drawerItem.dart';
 import "package:pawstic/globals.dart" as globals;
 import 'package:pawstic/pages/login/login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'homeWrapper.dart';
 
 class DrawerWrapper extends StatefulWidget {
   @override
@@ -11,6 +14,8 @@ class DrawerWrapper extends StatefulWidget {
 }
 
 class DrawerWrapperState extends State<DrawerWrapper> {
+  bool userLogged = false;
+
   List<Map> drawerItems = [
     {'icon': FeatherIcons.messageCircle, 'title': 'Mensajes'},
     {'icon': FeatherIcons.archive, 'title': 'Mis anuncios'},
@@ -18,6 +23,35 @@ class DrawerWrapperState extends State<DrawerWrapper> {
     {'icon': FeatherIcons.user, 'title': 'Perfil'},
     {'icon': FeatherIcons.settings, 'title': 'Configuración'},
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    isUserLogged();
+  }
+
+  Future<Null> isUserLogged() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString('userId') ?? "";
+    if (userId != "") {
+      setState(() {
+        userLogged = true;
+      });
+    }
+  }
+
+  Future<Null> logOut() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove('userId');
+
+    globals.isDrawerOpen = false;
+    globals.selectedIndex = 0;
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => HomeWrapper()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -28,15 +62,32 @@ class DrawerWrapperState extends State<DrawerWrapper> {
         children: [
           Column(
             children: [
-              InkWell(
-                  onTap: () {
-                    globals.isDrawerOpen = false;
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Login()),
-                    );
-                  },
-                  child: DrawerItem('Iniciar sesión', FeatherIcons.logIn))
+              if (!userLogged)
+                InkWell(
+                    onTap: () {
+                      globals.isDrawerOpen = false;
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Login()),
+                      );
+                    },
+                    child: DrawerItem('Iniciar sesión', FeatherIcons.logIn)),
+              if (userLogged)
+                InkWell(
+                    onTap: () {
+                      globals.isDrawerOpen = false;
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Login()),
+                      );
+                    },
+                    child: DrawerItem('Mensajes', FeatherIcons.messageCircle)),
+              if (userLogged)
+                InkWell(
+                    onTap: () {
+                      logOut();
+                    },
+                    child: DrawerItem('Cerrar sesión', FeatherIcons.logOut))
             ],
           ),
           Padding(
