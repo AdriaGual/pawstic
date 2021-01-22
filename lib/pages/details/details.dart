@@ -1,9 +1,14 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:http/http.dart' as http;
 import "package:pawstic/globals.dart" as globals;
 import 'package:pawstic/model/publish.dart';
+import 'package:pawstic/model/user.dart';
 import 'package:pawstic/pages/main/homeWrapper.dart';
 
 class Details extends StatefulWidget {
@@ -18,10 +23,24 @@ class DetailsState extends State<Details> {
   Publish publish;
   DetailsState(this.publish);
   List<String> images;
+  var user;
   @override
   void initState() {
     super.initState();
     images = this.publish.imageUrl.split(',');
+    fetchUser();
+  }
+
+  Future<Null> fetchUser() async {
+    var result = await http.get(globals.allUsersUrl + publish.userId);
+    setState(() {
+      user = json.decode(result.body);
+      user = User.fromJson(user);
+      /*user.forEach((k, v) {
+        print('{ key: $k, value: $v }');
+      });*/
+      log("a");
+    });
   }
 
   @override
@@ -196,7 +215,7 @@ class DetailsState extends State<Details> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text('Dianne Russell',
+                                      Text(user.name,
                                           style: TextStyle(
                                               fontFamily: 'PoppinsSemiBold',
                                               fontSize: 16.0,
