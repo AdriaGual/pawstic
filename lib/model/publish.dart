@@ -11,7 +11,7 @@ class Publish {
   bool isMale;
   String color;
   String imageUrl;
-  int userId;
+  String userId;
   String breed;
   int species;
   double latitude;

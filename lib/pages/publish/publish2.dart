@@ -16,6 +16,7 @@ import "package:pawstic/service/createPublishService.dart"
     as createPublishService;
 import 'package:pawstic/service/createPublishService.dart';
 import 'package:pawstic/theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Publish2 extends StatefulWidget {
   @override
@@ -24,6 +25,7 @@ class Publish2 extends StatefulWidget {
 
 class Publish2State extends State<Publish2> {
   ProgressDialog progressDialog;
+  var userId;
   void initState() {
     super.initState();
     createPublishService.years = 1;
@@ -82,7 +84,7 @@ class Publish2State extends State<Publish2> {
     });
   }
 
-  Future<void> uploadImage() async {
+  Future<Null> uploadImage() async {
     for (File image in createPublishService.images) {
       var cloudinary =
           CloudinaryPublic('drws2krnb', 'uploadImage', cache: false);
@@ -92,6 +94,8 @@ class Publish2State extends State<Publish2> {
       );
       createPublishService.imagesUploaded.add(response.secureUrl);
     }
+    final prefs = await SharedPreferences.getInstance();
+    userId = prefs.getString('userId') ?? "";
     createPublish();
   }
 
@@ -108,7 +112,7 @@ class Publish2State extends State<Publish2> {
         'isMale':
             (createPublishService.genderSelected == Gender.macho).toString(),
         'color': createPublishService.colorSelected,
-        'userId': 2.toString(),
+        'userId': userId,
         'breed': createPublishService.breed,
         'species': createPublishService.specieSelected.id.toString(),
         'latitude': createPublishService.latitude.toString(),

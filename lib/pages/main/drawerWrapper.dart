@@ -37,6 +37,8 @@ class DrawerWrapperState extends State<DrawerWrapper> {
       setState(() {
         userLogged = true;
       });
+    } else {
+      userLogged = false;
     }
   }
 

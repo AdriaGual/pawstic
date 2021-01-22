@@ -6,9 +6,11 @@ import 'package:pawstic/components/radioInputPublish.dart';
 import 'package:pawstic/components/textInput.dart';
 import "package:pawstic/globals.dart" as globals;
 import 'package:pawstic/model/specie.dart';
+import 'package:pawstic/pages/login/register.dart';
 import 'package:pawstic/pages/publish/publish2.dart';
 import "package:pawstic/service/createPublishService.dart"
     as createPublishService;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../components/colorSelector.dart';
 import '../../components/dropDownInputSpecies.dart';
@@ -22,6 +24,7 @@ class Publish1State extends State<Publish1> {
   final name = TextEditingController();
   final breed = TextEditingController();
   List<DropdownMenuItem<Specie>> dropdownSpecies;
+  bool userLogged = false;
 
   List<Specie> speciesItems = [
     Specie(1, "Perro"),
@@ -34,8 +37,20 @@ class Publish1State extends State<Publish1> {
   void initState() {
     super.initState();
     dropdownSpecies = buildDropDownMenuItems(speciesItems);
-
+    isUserLogged();
     createPublishService.specieSelected = dropdownSpecies[0].value;
+  }
+
+  Future<Null> isUserLogged() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString('userId') ?? "";
+    if (userId != "") {
+      setState(() {
+        userLogged = true;
+      });
+    } else {
+      userLogged = false;
+    }
   }
 
   List<DropdownMenuItem<Specie>> buildDropDownMenuItems(List listItems) {
@@ -91,9 +106,10 @@ class Publish1State extends State<Publish1> {
           SizedBox(height: 25),
           FloatingActionButton(
             onPressed: () {
+              isUserLogged();
               createPublishService.name = name.text;
               createPublishService.breed = breed.text;
-              if (breed.text.isEmpty || name.text.isEmpty) {
+              if (breed.text.isEmpty || name.text.isEmpty || !userLogged) {
                 showDialog(
                   context: context,
                   builder: (ctx) => AlertDialog(
@@ -119,6 +135,31 @@ class Publish1State extends State<Publish1> {
                                     fontFamily: 'PoppinsRegular',
                                     fontSize: 15.0,
                                     color: globals.bodyColor)),
+                          if (!userLogged)
+                            Column(children: [
+                              Text(
+                                  'Debes estar registrado para poder publicar, ',
+                                  style: TextStyle(
+                                      fontFamily: 'PoppinsRegular',
+                                      fontSize: 15.0,
+                                      color: globals.bodyColor)),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Register()),
+                                    );
+                                  },
+                                  child: Text('Regístrate',
+                                      style: TextStyle(
+                                          fontFamily: 'PoppinsSemiBold',
+                                          fontSize: 17.0,
+                                          color: globals.primaryColor)))
+                            ]),
                         ],
                       ),
                     ),
