@@ -215,11 +215,12 @@ class DetailsState extends State<Details> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(user.name,
-                                          style: TextStyle(
-                                              fontFamily: 'PoppinsSemiBold',
-                                              fontSize: 16.0,
-                                              color: globals.titleColor)),
+                                      if (user != null)
+                                        Text(user.name,
+                                            style: TextStyle(
+                                                fontFamily: 'PoppinsSemiBold',
+                                                fontSize: 16.0,
+                                                color: globals.titleColor)),
                                       Text('Dueña',
                                           style: TextStyle(
                                               fontFamily: 'PoppinsRegular',
