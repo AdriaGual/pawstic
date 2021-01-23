@@ -17,6 +17,7 @@ class Publish {
   double latitude;
   double longitude;
   String dateCreated;
+  String likedBy;
   Publish(
       this.publishId,
       this.name,
@@ -30,7 +31,8 @@ class Publish {
       this.userId,
       this.latitude,
       this.longitude,
-      this.dateCreated);
+      this.dateCreated,
+      this.likedBy);
 
   Publish.fromJson(Map json)
       : publishId = json['_id'],
@@ -45,7 +47,8 @@ class Publish {
         userId = json['userId'],
         latitude = json['latitude'],
         longitude = json['longitude'],
-        dateCreated = json['dateCreated'];
+        dateCreated = json['dateCreated'],
+        likedBy = json['likedBy'];
 
   Map toJson() {
     return {
@@ -61,7 +64,8 @@ class Publish {
       'userId': userId,
       'latitude': latitude,
       'longitude': longitude,
-      'dateCreated': dateCreated
+      'dateCreated': dateCreated,
+      'likedBy': likedBy
     };
   }
 

@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:http/http.dart' as http;
+import "package:pawstic/globals.dart" as globals;
 import 'package:pawstic/model/publish.dart';
 import 'package:pawstic/pages/details/details.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HorizontalCard extends StatefulWidget {
   final Map initialPublish;
@@ -29,7 +33,10 @@ class HorizontalCardState extends State<HorizontalCard> {
   double secondHeight;
   double heigth;
   Publish publish;
-
+  bool userLogged = false;
+  var userId;
+  List<String> likedBy = [];
+  bool publishLikedByUser = false;
   HorizontalCardState(this.initialPublish, this.width, this.secondWidth,
       this.heigth, this.secondHeight);
 
@@ -37,6 +44,67 @@ class HorizontalCardState extends State<HorizontalCard> {
   void initState() {
     super.initState();
     publish = Publish.fromJson(initialPublish);
+    isUserLogged();
+  }
+
+  Future<Null> isUserLogged() async {
+    final prefs = await SharedPreferences.getInstance();
+    userId = prefs.getString('userId') ?? "";
+    if (userId != "") {
+      setState(() {
+        userLogged = true;
+        likedBy = publish.likedBy.split(",");
+        publishLikedByUser = checkLikes(userId);
+      });
+    } else {
+      userLogged = false;
+    }
+  }
+
+  bool checkLikes(String userId) {
+    bool likedByUser = false;
+
+    for (String likedUser in likedBy) {
+      if (likedUser == userId) likedByUser = true;
+    }
+    return likedByUser;
+  }
+
+  Future<Null> likePublish() async {
+    if (!checkLikes(userId)) {
+      likedBy.add(userId);
+    }
+    await http.patch(
+      globals.allPublishingsUrl + publish.publishId,
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(<String, String>{
+        'likedBy': likedBy.join(","),
+      }),
+    );
+    setState(() {
+      publishLikedByUser = true;
+    });
+  }
+
+  Future<Null> disLikePublish() async {
+    if (checkLikes(userId)) {
+      likedBy.remove(userId);
+    }
+
+    await http.patch(
+      globals.allPublishingsUrl + publish.publishId,
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(<String, String>{
+        'likedBy': likedBy.length != 0 ? likedBy.join(",") : "",
+      }),
+    );
+    setState(() {
+      publishLikedByUser = false;
+    });
   }
 
   @override
@@ -107,10 +175,27 @@ class HorizontalCardState extends State<HorizontalCard> {
                               style: Theme.of(context).textTheme.subtitle2),
                         )
                     ])),
-                Icon(
-                  FeatherIcons.heart,
-                  size: 30,
-                ),
+                if (publishLikedByUser)
+                  InkWell(
+                      // When the user taps the button, show a snackbar.
+                      onTap: () {
+                        disLikePublish();
+                      },
+                      child: Icon(
+                        FontAwesomeIcons.solidHeart,
+                        color: globals.primaryColor,
+                        size: 30,
+                      ))
+                else
+                  InkWell(
+                      // When the user taps the button, show a snackbar.
+                      onTap: () {
+                        likePublish();
+                      },
+                      child: Icon(
+                        FontAwesomeIcons.heart,
+                        size: 30,
+                      ))
               ]))
         ]));
   }

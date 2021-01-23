@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
@@ -36,10 +35,6 @@ class DetailsState extends State<Details> {
     setState(() {
       user = json.decode(result.body);
       user = User.fromJson(user);
-      /*user.forEach((k, v) {
-        print('{ key: $k, value: $v }');
-      });*/
-      log("a");
     });
   }
 
