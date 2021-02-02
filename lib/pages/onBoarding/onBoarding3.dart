@@ -11,7 +11,8 @@ class OnBoarding3 extends StatelessWidget {
       theme: ThemeData(fontFamily: 'Poppins'),
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        body: Column(
+          body: SafeArea(
+        child: Column(
           children: [
             Image.asset(
               'assets/images/onBoarding/onBoarding3.png',
@@ -28,7 +29,7 @@ class OnBoarding3 extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodyText2),
             ),
-            SizedBox(height: 60),
+            SizedBox(height: 30),
             SizedBox(
               width: 200.0,
               height: 60.0,
@@ -63,7 +64,7 @@ class OnBoarding3 extends StatelessWidget {
             ),
           ],
         ),
-      ),
+      )),
     );
   }
 }

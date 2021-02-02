@@ -12,7 +12,8 @@ class OnBoarding2 extends StatelessWidget {
       theme: ThemeData(fontFamily: 'Poppins'),
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        body: Column(
+          body: SafeArea(
+        child: Column(
           children: [
             Image.asset(
               'assets/images/onBoarding/onBoarding2.png',
@@ -30,7 +31,7 @@ class OnBoarding2 extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodyText2),
             ),
-            SizedBox(height: 60),
+            SizedBox(height: 30),
             FloatingActionButton(
               onPressed: () {
                 Navigator.push(
@@ -47,7 +48,7 @@ class OnBoarding2 extends StatelessWidget {
             ),
           ],
         ),
-      ),
+      )),
     );
   }
 }

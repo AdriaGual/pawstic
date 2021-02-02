@@ -27,43 +27,47 @@ class OnBoarding1State extends State<OnBoarding1> {
       theme: ThemeData(fontFamily: 'Poppins'),
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        body: Column(
+          body: SafeArea(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(height: 100),
             Image.asset(
               'assets/images/onBoarding/onBoarding1.png',
               width: 400.0,
               fit: BoxFit.cover,
             ),
             SizedBox(height: 25),
-            Text('Encuentra tu mejor amigo',
-                style: Theme.of(context).textTheme.headline6),
-            SizedBox(height: 5),
-            Padding(
-              padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
-              child: Text(
-                  'Selecciona una localización y nuestra app te mostrará todos los animales en el área.',
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodyText2),
-            ),
-            SizedBox(height: 30),
-            FloatingActionButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => OnBoarding2()),
-                );
-              },
-              child: Icon(FeatherIcons.arrowRight),
-              backgroundColor: globals.primaryColor,
-            ),
-            SizedBox(height: 35),
-            Image.asset(
-              'assets/images/onBoarding/progressBar.png',
-            ),
+            Column(children: [
+              Text('Encuentra tu mejor amigo',
+                  style: Theme.of(context).textTheme.headline6),
+              SizedBox(height: 5),
+              Padding(
+                padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
+                child: Text(
+                    'Selecciona una localización y nuestra app te mostrará todos los animales en el área.',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodyText2),
+              ),
+              SizedBox(height: 30),
+              FloatingActionButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => OnBoarding2()),
+                  );
+                },
+                child: Icon(FeatherIcons.arrowRight),
+                backgroundColor: globals.primaryColor,
+              ),
+              SizedBox(height: 35),
+              Image.asset(
+                'assets/images/onBoarding/progressBar.png',
+              )
+            ]),
           ],
         ),
-      ),
+      )),
     );
   }
 }

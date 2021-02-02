@@ -4,10 +4,10 @@ import 'dart:io';
 import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:future_progress_dialog/future_progress_dialog.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'package:ndialog/ndialog.dart';
 import 'package:pawstic/components/imageFileContainer.dart';
 import "package:pawstic/globals.dart" as globals;
 import 'package:pawstic/model/specie.dart';
@@ -24,18 +24,13 @@ class Publish2 extends StatefulWidget {
 }
 
 class Publish2State extends State<Publish2> {
-  ProgressDialog progressDialog;
   var userId;
+
   void initState() {
     super.initState();
     createPublishService.years = 1;
     createPublishService.weight = 1;
     createPublishService.images = [];
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   List<DropdownMenuItem<Specie>> buildDropDownMenuItems(List listItems) {
@@ -71,17 +66,28 @@ class Publish2State extends State<Publish2> {
     });
   }
 
-  void getCurrentLocation() async {
-    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
-        .then((Position position) {
-      setState(() {
-        createPublishService.latitude = position.latitude;
-        createPublishService.longitude = position.longitude;
+  Future<Null> getCurrentLocation() async {
+    Future getFuture() {
+      return Future(() async {
+        await Geolocator.getCurrentPosition(
+                desiredAccuracy: LocationAccuracy.best)
+            .then((Position position) {
+          setState(() {
+            createPublishService.latitude = position.latitude;
+            createPublishService.longitude = position.longitude;
+          });
+          uploadImage();
+        }).catchError((e) {
+          print(e);
+        });
       });
-      uploadImage();
-    }).catchError((e) {
-      print(e);
-    });
+    }
+
+    await showDialog(
+        context: context,
+        child: FutureProgressDialog(
+          getFuture(),
+        ));
   }
 
   Future<Null> uploadImage() async {
@@ -123,7 +129,6 @@ class Publish2State extends State<Publish2> {
     );
     createPublishService.clear();
     globals.selectedIndex = 0;
-    progressDialog.dismiss();
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => HomeWrapper()),
@@ -288,25 +293,7 @@ class Publish2State extends State<Publish2> {
                     width: 200.0,
                     height: 60.0,
                     child: FloatingActionButton.extended(
-                      onPressed: () async {
-                        progressDialog = ProgressDialog(
-                          context,
-                          blur: 0,
-                          onDismiss: () {
-                            print("Do something onDismiss");
-                          },
-                        );
-                        progressDialog
-                            .setLoadingWidget(CircularProgressIndicator(
-                          valueColor:
-                              AlwaysStoppedAnimation(globals.primaryColor),
-                        ));
-                        progressDialog.setMessage(Text(
-                          "Publicando",
-                          style: Theme.of(context).textTheme.subtitle2,
-                        ));
-                        progressDialog.show();
-
+                      onPressed: () {
                         getCurrentLocation();
                       },
                       label: Text(

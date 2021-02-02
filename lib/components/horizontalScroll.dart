@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:future_progress_dialog/future_progress_dialog.dart';
 import 'package:http/http.dart' as http;
 import "package:pawstic/globals.dart" as globals;
 import 'package:pawstic/model/publish.dart';
@@ -16,6 +17,7 @@ class HorizontalScroll extends StatefulWidget {
 
 class HorizontalScrollState extends State<HorizontalScroll> {
   List<dynamic> publishings = [];
+
   @override
   void initState() {
     super.initState();
@@ -23,9 +25,23 @@ class HorizontalScrollState extends State<HorizontalScroll> {
   }
 
   Future<Null> fetchPublishings() async {
-    var result = await http.get(globals.allPublishingsUrl);
+    var result;
+    await Future.delayed(Duration(milliseconds: 50));
+    Future getFuture() {
+      return Future(() async {
+        result = await http.get(globals.allPublishingsUrl);
+        return result;
+      });
+    }
+
+    await showDialog(
+        context: context,
+        child: FutureProgressDialog(
+          getFuture(),
+        ));
+
+    publishings = json.decode(result.body);
     setState(() {
-      publishings = json.decode(result.body);
       if (publishings.length > 3) {
         publishings.sort((a, b) => DateTime.parse(a['dateCreated'])
             .compareTo(DateTime.parse(b['dateCreated'])));
