@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import "package:pawstic/globals.dart" as globals;
 import 'package:pawstic/model/publish.dart';
 
@@ -15,18 +12,9 @@ class HorizontalScrollVariant extends StatefulWidget {
 }
 
 class HorizontalScrollVariantState extends State<HorizontalScrollVariant> {
-  List<dynamic> publishings = [];
   @override
   void initState() {
     super.initState();
-    fetchPublishings();
-  }
-
-  void fetchPublishings() async {
-    var result = await http.get(globals.allPublishingsUrl);
-    setState(() {
-      publishings = json.decode(result.body);
-    });
   }
 
   @override
@@ -38,13 +26,15 @@ class HorizontalScrollVariantState extends State<HorizontalScrollVariant> {
         child: ListView.builder(
             scrollDirection: Axis.horizontal,
             shrinkWrap: true,
-            itemCount: publishings.length,
+            itemCount: globals.otherPublishings.length,
             itemBuilder: (BuildContext context, int index) {
               return Row(
                 children: <Widget>[
-                  if (Publish.fromJson(publishings[index]).imageUrl != null)
-                    HorizontalCard(
-                        publishings[index], 200.0, 170.0, 250.0, 100.0),
+                  if (Publish.fromJson(globals.otherPublishings[index])
+                          .imageUrl !=
+                      null)
+                    HorizontalCard(globals.otherPublishings[index], 200.0,
+                        170.0, 250.0, 100.0),
                 ],
               );
             }),

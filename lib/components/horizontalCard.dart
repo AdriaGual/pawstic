@@ -71,6 +71,9 @@ class HorizontalCardState extends State<HorizontalCard> {
   }
 
   Future<Null> likePublish() async {
+    setState(() {
+      publishLikedByUser = true;
+    });
     if (!checkLikes(userId)) {
       likedBy.add(userId);
     }
@@ -83,12 +86,12 @@ class HorizontalCardState extends State<HorizontalCard> {
         'likedBy': likedBy.join(","),
       }),
     );
-    setState(() {
-      publishLikedByUser = true;
-    });
   }
 
   Future<Null> disLikePublish() async {
+    setState(() {
+      publishLikedByUser = false;
+    });
     if (checkLikes(userId)) {
       likedBy.remove(userId);
     }
@@ -102,9 +105,6 @@ class HorizontalCardState extends State<HorizontalCard> {
         'likedBy': likedBy.length != 0 ? likedBy.join(",") : "",
       }),
     );
-    setState(() {
-      publishLikedByUser = false;
-    });
   }
 
   @override

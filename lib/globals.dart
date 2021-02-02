@@ -19,6 +19,9 @@ bool isDrawerOpen = false;
 double xOffset = 0;
 double yOffset = 0;
 double scaleFactor = 1;
+List<dynamic> publishings = [];
+List<dynamic> urgentPublishings = [];
+List<dynamic> otherPublishings = [];
 
 void openDrawer() {
   xOffset = 230;

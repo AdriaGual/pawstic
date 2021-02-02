@@ -1,11 +1,62 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:future_progress_dialog/future_progress_dialog.dart';
+import 'package:http/http.dart' as http;
 import 'package:pawstic/components/horizontalScrollVariant.dart';
+import "package:pawstic/globals.dart" as globals;
 
 import '../../components/filterBreed.dart';
 import '../../components/horizontalScroll.dart';
 import '../../components/searchBar.dart';
 
-class Main extends StatelessWidget {
+class Main extends StatefulWidget {
+  Main();
+
+  @override
+  State<StatefulWidget> createState() => MainState();
+}
+
+class MainState extends State<Main> {
+  @override
+  void initState() {
+    super.initState();
+    fetchPublishings();
+  }
+
+  Future<Null> fetchPublishings() async {
+    var result;
+    await Future.delayed(Duration(milliseconds: 50));
+    Future getFuture() {
+      return Future(() async {
+        result = await http.get(globals.allPublishingsUrl);
+        return result;
+      });
+    }
+
+    await showDialog(
+        context: context,
+        child: FutureProgressDialog(
+          getFuture(),
+        ));
+
+    setState(() {
+      globals.publishings = json.decode(result.body);
+      globals.publishings.sort((a, b) => DateTime.parse(a['dateCreated'])
+          .compareTo(DateTime.parse(b['dateCreated'])));
+      if (globals.publishings.length > 3) {
+        for (var a in globals.publishings) {
+          globals.urgentPublishings.add(a);
+          globals.otherPublishings.add(a);
+        }
+        globals.urgentPublishings
+            .removeRange(3, globals.urgentPublishings.length);
+
+        globals.otherPublishings.removeRange(0, 3);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
