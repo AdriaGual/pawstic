@@ -9,6 +9,7 @@ import "package:pawstic/globals.dart" as globals;
 import 'package:pawstic/model/publish.dart';
 import 'package:pawstic/model/user.dart';
 import 'package:pawstic/pages/main/homeWrapper.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Details extends StatefulWidget {
   final Publish publish;
@@ -23,11 +24,60 @@ class DetailsState extends State<Details> {
   DetailsState(this.publish);
   List<String> images;
   var user;
+  var userId;
+  bool userLogged = false;
+  List<String> likedBy = [];
+  bool publishLikedByUser = false;
+  var publishDate;
+  String timeFromPublish = "";
   @override
   void initState() {
     super.initState();
     images = this.publish.imageUrl.split(',');
     fetchUser();
+    isUserLogged();
+    publishDate = DateTime.parse(this.publish.dateCreated);
+    DateTime dateTimeNow = DateTime.now();
+    final differenceInDays = dateTimeNow.difference(publishDate).inDays;
+    final differenceInHours = dateTimeNow.difference(publishDate).inHours;
+    final differenceInMinutes = dateTimeNow.difference(publishDate).inMinutes;
+    if (differenceInDays == 0) {
+      if (differenceInHours == 0) {
+        if (differenceInMinutes == 0) {
+          timeFromPublish = "justo ahora";
+        } else {
+          timeFromPublish =
+              "hace " + differenceInMinutes.toString() + " minuto/s";
+        }
+      } else {
+        timeFromPublish = "hace " + differenceInHours.toString() + " hora/s";
+      }
+    } else {
+      timeFromPublish = "hace " + differenceInDays.toString() + " día/s";
+    }
+  }
+
+  Future<Null> isUserLogged() async {
+    final prefs = await SharedPreferences.getInstance();
+    userId = prefs.getString('userId') ?? "";
+    if (userId != "") {
+      setState(() {
+        userLogged = true;
+        likedBy = publish.likedBy.split(",");
+        publishLikedByUser = checkLikes(userId);
+      });
+    } else {
+      userLogged = false;
+    }
+  }
+
+  bool checkLikes(String userId) {
+    bool likedByUser = false;
+
+    for (String likedUser in likedBy) {
+      if (likedUser == userId) likedByUser = true;
+    }
+    return likedByUser;
   }
 
   Future<Null> fetchUser() async {
@@ -35,6 +85,44 @@ class DetailsState extends State<Details> {
     setState(() {
       user = json.decode(result.body);
       user = User.fromJson(user);
+    });
+  }
+
+  Future<Null> likePublish() async {
+    if (!checkLikes(userId)) {
+      likedBy.add(userId);
+    }
+    await http.patch(
+      globals.allPublishingsUrl + publish.publishId,
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(<String, String>{
+        'likedBy': likedBy.join(","),
+      }),
+    );
+    setState(() {
+      publishLikedByUser = true;
+    });
+  }
+
+  Future<Null> disLikePublish() async {
+    if (checkLikes(userId)) {
+      likedBy.remove(userId);
+    }
+
+    await http.patch(
+      globals.allPublishingsUrl + publish.publishId,
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(<String, String>{
+        'likedBy': likedBy.length != 0 ? likedBy.join(",") : "",
+      }),
+    );
+
+    setState(() {
+      publishLikedByUser = false;
     });
   }
 
@@ -81,15 +169,28 @@ class DetailsState extends State<Details> {
                     },
                   ),
                   Spacer(),
-                  IconButton(
-                    constraints: BoxConstraints(),
-                    color: Colors.white,
-                    icon: Icon(
-                      FeatherIcons.heart,
-                      size: 30,
-                    ),
-                    onPressed: () {},
-                  ),
+                  if (publishLikedByUser)
+                    InkWell(
+                        // When the user taps the button, show a snackbar.
+                        onTap: () {
+                          disLikePublish();
+                        },
+                        child: Icon(
+                          FontAwesomeIcons.solidHeart,
+                          color: globals.primaryColor,
+                          size: 30,
+                        ))
+                  else
+                    InkWell(
+                        // When the user taps the button, show a snackbar.
+                        onTap: () {
+                          likePublish();
+                        },
+                        child: Icon(
+                          FontAwesomeIcons.heart,
+                          color: Colors.white,
+                          size: 30,
+                        ))
                 ])),
           ]),
           Padding(
@@ -216,23 +317,12 @@ class DetailsState extends State<Details> {
                                                 fontFamily: 'PoppinsSemiBold',
                                                 fontSize: 16.0,
                                                 color: globals.titleColor)),
-                                      Text('Dueña',
+                                      Text(timeFromPublish,
                                           style: TextStyle(
                                               fontFamily: 'PoppinsRegular',
                                               fontSize: 14.0,
                                               color: globals.bodyColor)),
                                     ]),
-                                Spacer(),
-                                Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text('hace 3 dias',
-                                          style: TextStyle(
-                                              fontFamily: 'PoppinsRegular',
-                                              fontSize: 14.0,
-                                              color: globals.bodyColor)),
-                                    ])
                               ]),
                               SizedBox(height: 20),
                               Row(children: [

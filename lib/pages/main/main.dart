@@ -41,6 +41,9 @@ class MainState extends State<Main> {
         ));
 
     setState(() {
+      globals.publishings = [];
+      globals.urgentPublishings = [];
+      globals.otherPublishings = [];
       globals.publishings = json.decode(result.body);
       globals.publishings.sort((a, b) => DateTime.parse(a['dateCreated'])
           .compareTo(DateTime.parse(b['dateCreated'])));
