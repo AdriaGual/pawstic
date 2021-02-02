@@ -79,7 +79,7 @@ class MainState extends State<Main> {
               ),
             ),
           ),
-          HorizontalScroll(),
+          HorizontalScroll(globals.urgentPublishings),
           Align(
             alignment: Alignment.centerLeft,
             child: Padding(

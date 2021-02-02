@@ -5,13 +5,18 @@ import 'package:pawstic/model/publish.dart';
 import 'horizontalCard.dart';
 
 class HorizontalScroll extends StatefulWidget {
-  HorizontalScroll();
+  List<dynamic> urgentPublishings = [];
+  HorizontalScroll(this.urgentPublishings);
 
   @override
-  State<StatefulWidget> createState() => HorizontalScrollState();
+  State<StatefulWidget> createState() =>
+      HorizontalScrollState(this.urgentPublishings);
 }
 
 class HorizontalScrollState extends State<HorizontalScroll> {
+  List<dynamic> urgentPublishings = [];
+  HorizontalScrollState(this.urgentPublishings);
+
   @override
   void initState() {
     super.initState();
