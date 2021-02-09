@@ -15,11 +15,12 @@ class OnBoarding2 extends StatelessWidget {
           body: SafeArea(
         child: Column(
           children: [
+            Expanded(child:
             Image.asset(
               'assets/images/onBoarding/onBoarding2.png',
               width: 400.0,
               fit: BoxFit.cover,
-            ),
+            )),
             SizedBox(height: 25),
             Text('Conoce su historia',
                 style: Theme.of(context).textTheme.headline6),
@@ -46,6 +47,7 @@ class OnBoarding2 extends StatelessWidget {
             Image.asset(
               'assets/images/onBoarding/progressBar2.png',
             ),
+            SizedBox(height: 30),
           ],
         ),
       )),

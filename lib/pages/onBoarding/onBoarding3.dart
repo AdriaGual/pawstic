@@ -14,11 +14,12 @@ class OnBoarding3 extends StatelessWidget {
           body: SafeArea(
         child: Column(
           children: [
+            Expanded(child:
             Image.asset(
               'assets/images/onBoarding/onBoarding3.png',
               width: 400.0,
               fit: BoxFit.cover,
-            ),
+            )),
             SizedBox(height: 25),
             Text('Vive nuevas aventuras',
                 style: Theme.of(context).textTheme.headline6),
@@ -62,6 +63,7 @@ class OnBoarding3 extends StatelessWidget {
             Image.asset(
               'assets/images/onBoarding/progressBar3.png',
             ),
+            SizedBox(height: 30),
           ],
         ),
       )),
