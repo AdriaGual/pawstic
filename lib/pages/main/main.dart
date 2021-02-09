@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:future_progress_dialog/future_progress_dialog.dart';
@@ -21,7 +22,9 @@ class MainState extends State<Main> {
   @override
   void initState() {
     super.initState();
+    log("start");
     fetchPublishings();
+
   }
 
   Future<Null> fetchPublishings() async {

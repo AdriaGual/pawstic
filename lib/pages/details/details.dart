@@ -145,8 +145,8 @@ class DetailsState extends State<Details> {
                   },
                   itemCount: images.length,
                   layout: SwiperLayout.STACK,
-                  itemWidth: 400.0,
-                  itemHeight: 400.0,
+                  itemWidth: 500.0,
+                  itemHeight: 500.0,
                 )),
             Padding(
                 padding: EdgeInsets.all(30),
@@ -193,8 +193,9 @@ class DetailsState extends State<Details> {
                         ))
                 ])),
           ]),
+
           Padding(
-              padding: EdgeInsets.fromLTRB(0, 340, 0, 0),
+              padding: EdgeInsets.fromLTRB(0, 260, 0, 0),
               child: ClipRRect(
                   borderRadius: BorderRadius.circular(16.0),
                   child: Container(
@@ -351,7 +352,8 @@ class DetailsState extends State<Details> {
                                   backgroundColor: globals.primaryColor,
                                 ),
                                 Spacer(),
-                              ])
+                              ]),
+                              SizedBox(height: 10),
                             ],
                           )))))
         ],
