@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'model/specie.dart';
+
 Color bodyColor = HexColor.fromHex('#4E4B66');
 Color titleColor = HexColor.fromHex('#14142B');
 Color primaryColor = HexColor.fromHex('#FF6D59');
@@ -29,6 +31,14 @@ void openDrawer() {
   scaleFactor = 0.6;
   isDrawerOpen = true;
 }
+
+List<Specie> speciesItems = [
+  Specie(1, "Perro"),
+  Specie(2, "Gato"),
+  Specie(3, "Conejo"),
+  Specie(4, "Pájaro"),
+  Specie(5, "Otro")
+];
 
 void closeDrawer() {
   xOffset = 0;

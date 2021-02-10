@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:future_progress_dialog/future_progress_dialog.dart';
@@ -7,7 +6,6 @@ import 'package:http/http.dart' as http;
 import 'package:pawstic/components/horizontalScrollVariant.dart';
 import "package:pawstic/globals.dart" as globals;
 
-import '../../components/filterBreed.dart';
 import '../../components/horizontalScroll.dart';
 import '../../components/searchBar.dart';
 
@@ -19,12 +17,15 @@ class Main extends StatefulWidget {
 }
 
 class MainState extends State<Main> {
+  List<int> selectedSpecies = [];
+  List<dynamic> initialUrgentPublishings = [];
+  List<dynamic> initialOtherPublishings = [];
+
   @override
   void initState() {
     super.initState();
-    log("start");
     fetchPublishings();
-
+    selectedSpecies = [];
   }
 
   Future<Null> fetchPublishings() async {
@@ -60,7 +61,52 @@ class MainState extends State<Main> {
 
         globals.otherPublishings.removeRange(0, 3);
       }
+      initialUrgentPublishings = globals.urgentPublishings;
+      initialOtherPublishings = globals.otherPublishings;
     });
+  }
+
+  filterBreed(int n) {
+    if (!selectedSpecies.contains(n)) {
+      setState(() {
+        selectedSpecies.add(n);
+      });
+
+      filterBySpecies();
+    } else {
+      setState(() {
+        selectedSpecies.remove(n);
+      });
+      filterBySpecies();
+    }
+  }
+
+  filterBySpecies() {
+    if (selectedSpecies.isNotEmpty) {
+      List<dynamic> filteredUrgentPublishings = [];
+      for (var publish in globals.urgentPublishings) {
+        if (selectedSpecies.contains(publish['species'])) {
+          filteredUrgentPublishings.add(publish);
+        }
+      }
+
+      List<dynamic> filteredOtherPublishings = [];
+      for (var publish in globals.otherPublishings) {
+        if (selectedSpecies.contains(publish['species'])) {
+          filteredOtherPublishings.add(publish);
+        }
+      }
+
+      setState(() {
+        globals.urgentPublishings = filteredUrgentPublishings;
+        globals.otherPublishings = filteredOtherPublishings;
+      });
+    } else {
+      setState(() {
+        globals.urgentPublishings = initialUrgentPublishings;
+        globals.otherPublishings = initialOtherPublishings;
+      });
+    }
   }
 
   @override
@@ -70,7 +116,72 @@ class MainState extends State<Main> {
       child: Column(
         children: [
           SearchBar(),
-          FilterBreed(),
+          Padding(
+            padding: EdgeInsets.fromLTRB(30, 20, 30, 10),
+            child: Row(
+              children: [
+                InkWell(
+                    onTap: () {
+                      filterBreed(1);
+                    },
+                    child: Text('Perros',
+                        style: TextStyle(
+                            fontFamily: !selectedSpecies.contains(1)
+                                ? 'PoppinsMedium'
+                                : 'PoppinsBold',
+                            fontSize: 16.0,
+                            color: globals.bodyColor))),
+                Spacer(),
+                InkWell(
+                    onTap: () {
+                      filterBreed(2);
+                    },
+                    child: Text('Gatos',
+                        style: TextStyle(
+                            fontFamily: !selectedSpecies.contains(2)
+                                ? 'PoppinsMedium'
+                                : 'PoppinsBold',
+                            fontSize: 16.0,
+                            color: globals.bodyColor))),
+                Spacer(),
+                InkWell(
+                    onTap: () {
+                      filterBreed(3);
+                    },
+                    child: Text('Conejos',
+                        style: TextStyle(
+                            fontFamily: !selectedSpecies.contains(3)
+                                ? 'PoppinsMedium'
+                                : 'PoppinsBold',
+                            fontSize: 16.0,
+                            color: globals.bodyColor))),
+                Spacer(),
+                InkWell(
+                    onTap: () {
+                      filterBreed(4);
+                    },
+                    child: Text('Pájaros',
+                        style: TextStyle(
+                            fontFamily: !selectedSpecies.contains(4)
+                                ? 'PoppinsMedium'
+                                : 'PoppinsBold',
+                            fontSize: 16.0,
+                            color: globals.bodyColor))),
+                Spacer(),
+                InkWell(
+                    onTap: () {
+                      filterBreed(5);
+                    },
+                    child: Text('Otros',
+                        style: TextStyle(
+                            fontFamily: !selectedSpecies.contains(5)
+                                ? 'PoppinsMedium'
+                                : 'PoppinsBold',
+                            fontSize: 16.0,
+                            color: globals.bodyColor))),
+              ],
+            ),
+          ),
           Align(
             alignment: Alignment.centerLeft,
             child: Padding(

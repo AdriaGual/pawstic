@@ -26,17 +26,11 @@ class Publish1State extends State<Publish1> {
   List<DropdownMenuItem<Specie>> dropdownSpecies;
   bool userLogged = false;
 
-  List<Specie> speciesItems = [
-    Specie(1, "Perro"),
-    Specie(2, "Gato"),
-    Specie(3, "Conejo"),
-    Specie(4, "Pájaro"),
-    Specie(5, "Otro")
-  ];
+
 
   void initState() {
     super.initState();
-    dropdownSpecies = buildDropDownMenuItems(speciesItems);
+    dropdownSpecies = buildDropDownMenuItems(globals.speciesItems);
     isUserLogged();
     createPublishService.specieSelected = dropdownSpecies[0].value;
   }
