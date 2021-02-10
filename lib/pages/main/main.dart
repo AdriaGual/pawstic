@@ -1,13 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:future_progress_dialog/future_progress_dialog.dart';
 import 'package:http/http.dart' as http;
 import 'package:pawstic/components/horizontalScrollVariant.dart';
 import "package:pawstic/globals.dart" as globals;
 
 import '../../components/horizontalScroll.dart';
-import '../../components/searchBar.dart';
 
 class Main extends StatefulWidget {
   Main();
@@ -109,13 +109,82 @@ class MainState extends State<Main> {
     }
   }
 
+  filterPublishings(String text) {
+    print("First text fieldssss:" + text);
+
+    if (text.isNotEmpty) {
+      List<dynamic> filteredUrgentPublishings = [];
+      List<dynamic> filteredOtherPublishings = [];
+      for (var publish in globals.urgentPublishings) {
+        if (publish['name'].contains(text)) {
+          filteredUrgentPublishings.add(publish);
+        }
+      }
+
+      for (var publish in globals.otherPublishings) {
+        if (publish['name'].contains(text)) {
+          filteredOtherPublishings.add(publish);
+        }
+      }
+
+      setState(() {
+        globals.urgentPublishings = filteredUrgentPublishings;
+        globals.otherPublishings = filteredOtherPublishings;
+      });
+    } else {
+      setState(() {
+        globals.urgentPublishings = initialUrgentPublishings;
+        globals.otherPublishings = initialOtherPublishings;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: SingleChildScrollView(
       child: Column(
         children: [
-          SearchBar(),
+          Padding(
+            padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
+            child: TextFormField(
+              cursorColor: globals.primaryColor,
+              style: TextStyle(
+                  fontFamily: 'PoppinsRegular',
+                  fontSize: 17.0,
+                  color: globals.titleColor),
+              decoration: InputDecoration(
+                  hintText: 'Buscar...',
+                  hintStyle: TextStyle(
+                      fontFamily: 'PoppinsRegular',
+                      fontSize: 17.0,
+                      color: globals.greyColor),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide:
+                        const BorderSide(color: Colors.white, width: 2.0),
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  enabledBorder: const OutlineInputBorder(
+                    borderSide:
+                        const BorderSide(color: Colors.white, width: 0.0),
+                    borderRadius: const BorderRadius.all(
+                      const Radius.circular(15.0),
+                    ),
+                  ),
+                  prefixIcon: Padding(
+                    padding: EdgeInsets.fromLTRB(30, 0, 10, 0),
+                    child: Icon(
+                      FeatherIcons.search,
+                      color: globals.titleColor,
+                    ),
+                  ),
+                  filled: true,
+                  fillColor: globals.fillGreyColor),
+              onChanged: (text) {
+                filterPublishings(text);
+              },
+            ),
+          ),
           Padding(
             padding: EdgeInsets.fromLTRB(30, 20, 30, 10),
             child: Row(
