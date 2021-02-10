@@ -110,8 +110,6 @@ class MainState extends State<Main> {
   }
 
   filterPublishings(String text) {
-    print("First text fieldssss:" + text);
-
     if (text.isNotEmpty) {
       List<dynamic> filteredUrgentPublishings = [];
       List<dynamic> filteredOtherPublishings = [];
