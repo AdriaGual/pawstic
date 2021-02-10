@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:future_progress_dialog/future_progress_dialog.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:pawstic/components/horizontalScrollVariant.dart';
 import "package:pawstic/globals.dart" as globals;
@@ -20,7 +21,7 @@ class MainState extends State<Main> {
   List<int> selectedSpecies = [];
   List<dynamic> initialUrgentPublishings = [];
   List<dynamic> initialOtherPublishings = [];
-
+  double currentDistance;
   @override
   void initState() {
     super.initState();
@@ -28,7 +29,7 @@ class MainState extends State<Main> {
     selectedSpecies = [];
   }
 
-  Future<Null> fetchPublishings() async {
+  void fetchPublishings() async {
     var result;
     await Future.delayed(Duration(milliseconds: 50));
     Future getFuture() {
@@ -61,8 +62,26 @@ class MainState extends State<Main> {
 
         globals.otherPublishings.removeRange(0, 3);
       }
+      determinePosition();
       initialUrgentPublishings = globals.urgentPublishings;
-      initialOtherPublishings = globals.otherPublishings;
+      //initialOtherPublishings = globals.otherPublishings;
+    });
+  }
+
+  void determinePosition() async {
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
+        .then((Position position) {
+      for (var a in globals.otherPublishings) {
+        double distanceInMeters = Geolocator.distanceBetween(position.latitude,
+            position.longitude, a['latitude'], a['longitude']);
+        a['distance'] = distanceInMeters;
+        initialOtherPublishings.add(a);
+      }
+      setState(() {
+        initialOtherPublishings
+            .sort((a, b) => a['distance'].compareTo(b['distance']));
+        globals.otherPublishings = initialOtherPublishings;
+      });
     });
   }
 

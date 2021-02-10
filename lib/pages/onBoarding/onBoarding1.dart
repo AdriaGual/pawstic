@@ -32,11 +32,12 @@ class OnBoarding1State extends State<OnBoarding1> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Image.asset(
+            Expanded(
+                child: Image.asset(
               'assets/images/onBoarding/onBoarding1.png',
               width: 400.0,
               fit: BoxFit.cover,
-            ),
+            )),
             SizedBox(height: 25),
             Column(children: [
               Text('Encuentra tu mejor amigo',
@@ -45,7 +46,7 @@ class OnBoarding1State extends State<OnBoarding1> {
               Padding(
                 padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
                 child: Text(
-                    'Selecciona una localización y nuestra app te mostrará todos los animales en el área.',
+                    'Nuestra app te mostrará todos los animales en el área.',
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodyText2),
               ),
@@ -65,6 +66,7 @@ class OnBoarding1State extends State<OnBoarding1> {
                 'assets/images/onBoarding/progressBar.png',
               )
             ]),
+            SizedBox(height: 30),
           ],
         ),
       )),

@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import "package:pawstic/globals.dart" as globals;
 import 'package:pawstic/pages/publish/publish1.dart';
 
+import '../likes.dart';
 import 'main.dart';
 
 class Home extends StatefulWidget {
@@ -27,21 +28,7 @@ class HomeState extends State<Home> {
     }
   }
 
-  List<Map> categories = [
-    {'name': 'Cats', 'iconPath': 'images/cat.png'},
-    {'name': 'Dogs', 'iconPath': 'images/dog.png'},
-    {'name': 'Bunnies', 'iconPath': 'images/rabbit.png'},
-    {'name': 'Parrots', 'iconPath': 'images/parrot.png'},
-    {'name': 'Horses', 'iconPath': 'images/horse.png'}
-  ];
-
-  static List<Widget> _widgetOptions = <Widget>[
-    Main(),
-    Publish1(),
-    Text(
-      'Index 2: School',
-    ),
-  ];
+  static List<Widget> _widgetOptions = <Widget>[Main(), Publish1(), Likes()];
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(

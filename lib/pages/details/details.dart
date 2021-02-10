@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import "package:pawstic/globals.dart" as globals;
 import 'package:pawstic/model/publish.dart';
@@ -30,12 +31,18 @@ class DetailsState extends State<Details> {
   bool publishLikedByUser = false;
   var publishDate;
   String timeFromPublish = "";
+  String distance = "0";
   @override
   void initState() {
     super.initState();
     images = this.publish.imageUrl.split(',');
+    calculateTime();
+    determinePosition();
     fetchUser();
     isUserLogged();
+  }
+
+  void calculateTime() {
     publishDate = DateTime.parse(this.publish.dateCreated);
     DateTime dateTimeNow = DateTime.now();
     final differenceInDays = dateTimeNow.difference(publishDate).inDays;
@@ -55,6 +62,40 @@ class DetailsState extends State<Details> {
     } else {
       timeFromPublish = "hace " + differenceInDays.toString() + " día/s";
     }
+  }
+
+  void determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permantly denied, we cannot request permissions.');
+    }
+
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission != LocationPermission.whileInUse &&
+          permission != LocationPermission.always) {
+        return Future.error(
+            'Location permissions are denied (actual value: $permission).');
+      }
+    }
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
+        .then((Position position) {
+      setState(() {
+        distance = (Geolocator.distanceBetween(position.latitude,
+                    position.longitude, publish.latitude, publish.longitude) /
+                1000)
+            .toStringAsFixed(1);
+      });
+    });
   }
 
   Future<Null> isUserLogged() async {
@@ -92,18 +133,19 @@ class DetailsState extends State<Details> {
     if (!checkLikes(userId)) {
       likedBy.add(userId);
     }
-    await http.patch(
-      globals.allPublishingsUrl + publish.publishId,
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode(<String, String>{
-        'likedBy': likedBy.join(","),
-      }),
-    ).then((value) =>    setState(() {
-      publishLikedByUser = true;
-    }));
-
+    await http
+        .patch(
+          globals.allPublishingsUrl + publish.publishId,
+          headers: <String, String>{
+            'Content-Type': 'application/json',
+          },
+          body: jsonEncode(<String, String>{
+            'likedBy': likedBy.join(","),
+          }),
+        )
+        .then((value) => setState(() {
+              publishLikedByUser = true;
+            }));
   }
 
   Future<Null> disLikePublish() async {
@@ -111,19 +153,19 @@ class DetailsState extends State<Details> {
       likedBy.remove(userId);
     }
 
-    await http.patch(
-      globals.allPublishingsUrl + publish.publishId,
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode(<String, String>{
-        'likedBy': likedBy.length != 0 ? likedBy.join(",") : "",
-      }),
-    ).then((value) => setState(() {
-      publishLikedByUser = false;
-    }));
-
-
+    await http
+        .patch(
+          globals.allPublishingsUrl + publish.publishId,
+          headers: <String, String>{
+            'Content-Type': 'application/json',
+          },
+          body: jsonEncode(<String, String>{
+            'likedBy': likedBy.length != 0 ? likedBy.join(",") : "",
+          }),
+        )
+        .then((value) => setState(() {
+              publishLikedByUser = false;
+            }));
   }
 
   @override
@@ -193,7 +235,6 @@ class DetailsState extends State<Details> {
                         ))
                 ])),
           ]),
-
           Padding(
               padding: EdgeInsets.fromLTRB(0, 260, 0, 0),
               child: ClipRRect(
@@ -232,7 +273,7 @@ class DetailsState extends State<Details> {
                                   SizedBox(
                                     width: 10,
                                   ),
-                                  Text('a 1.5 km',
+                                  Text('a ' + distance.toString() + ' km',
                                       style:
                                           Theme.of(context).textTheme.bodyText2)
                                 ],
