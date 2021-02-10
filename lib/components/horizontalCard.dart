@@ -82,10 +82,10 @@ class HorizontalCardState extends State<HorizontalCard> {
       body: jsonEncode(<String, String>{
         'likedBy': likedBy.join(","),
       }),
-    );
-    setState(() {
+    ).then((value) => setState(() {
       publishLikedByUser = true;
-    });
+    }));
+    
   }
 
   Future<Null> disLikePublish() async {
@@ -101,7 +101,9 @@ class HorizontalCardState extends State<HorizontalCard> {
       body: jsonEncode(<String, String>{
         'likedBy': likedBy.length != 0 ? likedBy.join(",") : "",
       }),
-    );
+    ).then((value) => setState(() {
+      publishLikedByUser = true;
+    }));
 
     setState(() {
       publishLikedByUser = false;
@@ -176,7 +178,7 @@ class HorizontalCardState extends State<HorizontalCard> {
                               style: Theme.of(context).textTheme.subtitle2),
                         )
                     ])),
-                if (publishLikedByUser)
+                if (publishLikedByUser && userLogged)
                   InkWell(
                       // When the user taps the button, show a snackbar.
                       onTap: () {
@@ -187,7 +189,7 @@ class HorizontalCardState extends State<HorizontalCard> {
                         color: globals.primaryColor,
                         size: 30,
                       ))
-                else
+                else if (!publishLikedByUser && userLogged)
                   InkWell(
                       // When the user taps the button, show a snackbar.
                       onTap: () {

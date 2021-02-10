@@ -100,10 +100,10 @@ class DetailsState extends State<Details> {
       body: jsonEncode(<String, String>{
         'likedBy': likedBy.join(","),
       }),
-    );
-    setState(() {
+    ).then((value) =>    setState(() {
       publishLikedByUser = true;
-    });
+    }));
+
   }
 
   Future<Null> disLikePublish() async {
@@ -119,11 +119,11 @@ class DetailsState extends State<Details> {
       body: jsonEncode(<String, String>{
         'likedBy': likedBy.length != 0 ? likedBy.join(",") : "",
       }),
-    );
-
-    setState(() {
+    ).then((value) => setState(() {
       publishLikedByUser = false;
-    });
+    }));
+
+
   }
 
   @override
@@ -169,7 +169,7 @@ class DetailsState extends State<Details> {
                     },
                   ),
                   Spacer(),
-                  if (publishLikedByUser)
+                  if (publishLikedByUser && userLogged)
                     InkWell(
                         // When the user taps the button, show a snackbar.
                         onTap: () {
@@ -180,7 +180,7 @@ class DetailsState extends State<Details> {
                           color: globals.primaryColor,
                           size: 30,
                         ))
-                  else
+                  else if (!publishLikedByUser && userLogged)
                     InkWell(
                         // When the user taps the button, show a snackbar.
                         onTap: () {
