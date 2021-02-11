@@ -19,8 +19,7 @@ class Main extends StatefulWidget {
 
 class MainState extends State<Main> {
   List<int> selectedSpecies = [];
-  List<dynamic> initialUrgentPublishings = [];
-  List<dynamic> initialOtherPublishings = [];
+
   double currentDistance;
   @override
   void initState() {
@@ -63,8 +62,7 @@ class MainState extends State<Main> {
         globals.otherPublishings.removeRange(0, 3);
       }
       determinePosition();
-      initialUrgentPublishings = globals.urgentPublishings;
-      //initialOtherPublishings = globals.otherPublishings;
+      globals.initialUrgentPublishings = globals.urgentPublishings;
     });
   }
 
@@ -75,12 +73,12 @@ class MainState extends State<Main> {
         double distanceInMeters = Geolocator.distanceBetween(position.latitude,
             position.longitude, a['latitude'], a['longitude']);
         a['distance'] = distanceInMeters;
-        initialOtherPublishings.add(a);
+        globals.initialOtherPublishings.add(a);
       }
       setState(() {
-        initialOtherPublishings
+        globals.initialOtherPublishings
             .sort((a, b) => a['distance'].compareTo(b['distance']));
-        globals.otherPublishings = initialOtherPublishings;
+        globals.otherPublishings = globals.initialOtherPublishings;
       });
     });
   }
@@ -122,8 +120,8 @@ class MainState extends State<Main> {
       });
     } else {
       setState(() {
-        globals.urgentPublishings = initialUrgentPublishings;
-        globals.otherPublishings = initialOtherPublishings;
+        globals.urgentPublishings = globals.initialUrgentPublishings;
+        globals.otherPublishings = globals.initialOtherPublishings;
       });
     }
   }
@@ -150,8 +148,8 @@ class MainState extends State<Main> {
       });
     } else {
       setState(() {
-        globals.urgentPublishings = initialUrgentPublishings;
-        globals.otherPublishings = initialOtherPublishings;
+        globals.urgentPublishings = globals.initialUrgentPublishings;
+        globals.otherPublishings = globals.initialOtherPublishings;
       });
     }
   }

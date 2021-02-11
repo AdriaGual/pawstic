@@ -24,7 +24,8 @@ double scaleFactor = 1;
 List<dynamic> publishings = [];
 List<dynamic> urgentPublishings = [];
 List<dynamic> otherPublishings = [];
-
+List<dynamic> initialUrgentPublishings = [];
+List<dynamic> initialOtherPublishings = [];
 void openDrawer() {
   xOffset = 230;
   yOffset = 150;

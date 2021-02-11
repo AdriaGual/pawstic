@@ -13,6 +13,11 @@ class OnBoarding1 extends StatefulWidget {
 }
 
 class OnBoarding1State extends State<OnBoarding1> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   setOnBoardingDone() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -32,12 +37,11 @@ class OnBoarding1State extends State<OnBoarding1> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Expanded(
-                child: Image.asset(
+            Image.asset(
               'assets/images/onBoarding/onBoarding1.png',
               width: 400.0,
               fit: BoxFit.cover,
-            )),
+            ),
             SizedBox(height: 25),
             Column(children: [
               Text('Encuentra tu mejor amigo',
