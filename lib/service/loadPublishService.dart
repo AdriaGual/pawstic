@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:geolocator/geolocator.dart';
 import "package:pawstic/globals.dart" as globals;
 
 List<int> selectedSpecies = [];
@@ -83,7 +84,7 @@ void splitPublishings() async {
 }
 
 void sortPublishings(String filterText) {
-  /*if (globals.position != null) {
+  if (globals.position != null) {
     globals.initialOtherPublishings = [];
     for (var a in globals.otherPublishings) {
       double distanceInMeters = Geolocator.distanceBetween(
@@ -97,7 +98,7 @@ void sortPublishings(String filterText) {
     globals.initialOtherPublishings
         .sort((a, b) => a.distance.compareTo(b.distance));
     globals.otherPublishings = globals.initialOtherPublishings;
-  }*/
+  }
 
   globals.initialUrgentPublishings = globals.urgentPublishings;
   filterBySpecies();
