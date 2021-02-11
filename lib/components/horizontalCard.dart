@@ -74,18 +74,19 @@ class HorizontalCardState extends State<HorizontalCard> {
     if (!checkLikes(userId)) {
       likedBy.add(userId);
     }
-    await http.patch(
-      globals.allPublishingsUrl + publish.publishId,
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode(<String, String>{
-        'likedBy': likedBy.join(","),
-      }),
-    ).then((value) => setState(() {
-      publishLikedByUser = true;
-    }));
-    
+    await http
+        .patch(
+          globals.allPublishingsUrl + publish.sId,
+          headers: <String, String>{
+            'Content-Type': 'application/json',
+          },
+          body: jsonEncode(<String, String>{
+            'likedBy': likedBy.join(","),
+          }),
+        )
+        .then((value) => setState(() {
+              publishLikedByUser = true;
+            }));
   }
 
   Future<Null> disLikePublish() async {
@@ -93,17 +94,19 @@ class HorizontalCardState extends State<HorizontalCard> {
       likedBy.remove(userId);
     }
 
-    await http.patch(
-      globals.allPublishingsUrl + publish.publishId,
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode(<String, String>{
-        'likedBy': likedBy.length != 0 ? likedBy.join(",") : "",
-      }),
-    ).then((value) => setState(() {
-      publishLikedByUser = true;
-    }));
+    await http
+        .patch(
+          globals.allPublishingsUrl + publish.sId,
+          headers: <String, String>{
+            'Content-Type': 'application/json',
+          },
+          body: jsonEncode(<String, String>{
+            'likedBy': likedBy.length != 0 ? likedBy.join(",") : "",
+          }),
+        )
+        .then((value) => setState(() {
+              publishLikedByUser = true;
+            }));
 
     setState(() {
       publishLikedByUser = false;

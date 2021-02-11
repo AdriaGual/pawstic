@@ -1,10 +1,5 @@
-import 'dart:convert';
-
-import "package:pawstic/globals.dart" as globals;
-import 'package:pawstic/service/webService.dart';
-
 class Publish {
-  String publishId;
+  String sId;
   String name;
   int years;
   int weight;
@@ -18,64 +13,60 @@ class Publish {
   double longitude;
   String dateCreated;
   String likedBy;
+  int iV;
+
   Publish(
-      this.publishId,
+      {this.sId,
       this.name,
       this.years,
       this.weight,
       this.isMale,
       this.color,
-      this.species,
-      this.breed,
       this.imageUrl,
       this.userId,
+      this.breed,
+      this.species,
       this.latitude,
       this.longitude,
       this.dateCreated,
-      this.likedBy);
+      this.likedBy,
+      this.iV});
 
-  Publish.fromJson(Map json)
-      : publishId = json['_id'],
-        name = json['name'],
-        years = json['years'],
-        weight = json['weight'],
-        isMale = json['isMale'],
-        color = json['color'],
-        species = json['species'],
-        breed = json['breed'],
-        imageUrl = json['imageUrl'],
-        userId = json['userId'],
-        latitude = json['latitude'],
-        longitude = json['longitude'],
-        dateCreated = json['dateCreated'],
-        likedBy = json['likedBy'];
-
-  Map toJson() {
-    return {
-      '_id': publishId,
-      'name': name,
-      'years': years,
-      'weight': weight,
-      'isMale': isMale,
-      'color': color,
-      'species': species,
-      'breed': breed,
-      'imageUrl': imageUrl,
-      'userId': userId,
-      'latitude': latitude,
-      'longitude': longitude,
-      'dateCreated': dateCreated,
-      'likedBy': likedBy
-    };
+  Publish.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    name = json['name'];
+    years = json['years'];
+    weight = json['weight'];
+    isMale = json['isMale'];
+    color = json['color'];
+    imageUrl = json['imageUrl'];
+    userId = json['userId'];
+    breed = json['breed'];
+    species = json['species'];
+    latitude = json['latitude'];
+    longitude = json['longitude'];
+    dateCreated = json['dateCreated'];
+    likedBy = json['likedBy'];
+    iV = json['__v'];
   }
 
-  static Resource<List<Publish>> get all {
-    return Resource(
-        url: globals.allPublishingsUrl,
-        parse: (response) {
-          final result = json.decode(response.body);
-          Iterable list = result;
-          return list.map((model) => Publish.fromJson(model)).toList();
-        });
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.sId;
+    data['name'] = this.name;
+    data['years'] = this.years;
+    data['weight'] = this.weight;
+    data['isMale'] = this.isMale;
+    data['color'] = this.color;
+    data['imageUrl'] = this.imageUrl;
+    data['userId'] = this.userId;
+    data['breed'] = this.breed;
+    data['species'] = this.species;
+    data['latitude'] = this.latitude;
+    data['longitude'] = this.longitude;
+    data['dateCreated'] = this.dateCreated;
+    data['likedBy'] = this.likedBy;
+    data['__v'] = this.iV;
+    return data;
   }
 }

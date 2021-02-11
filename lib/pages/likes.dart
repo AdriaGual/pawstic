@@ -1,7 +1,7 @@
 import 'dart:core';
 
 import 'package:flutter/material.dart';
-import 'package:pawstic/components/radioInputPublish.dart';
+import 'package:pawstic/api/publish_api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Likes extends StatefulWidget {
@@ -50,15 +50,85 @@ class LikesState extends State<Likes> {
                   style: Theme.of(context).textTheme.headline5),
             ),
           ),
-          SizedBox(height: 15),
-          SizedBox(height: 15),
-          RadioInputPublish(),
-          SizedBox(height: 5),
-          Align(
-              alignment: Alignment.topLeft,
-              child:
-                  Text('Color', style: Theme.of(context).textTheme.headline4)),
-          SizedBox(height: 15),
+          FutureBuilder(
+              future: fetchPublishings(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasError) {
+                    return Text("API Error");
+                  } else {
+                    print(context);
+                    print(snapshot.data[0].name);
+                    return GridView.count(
+                      primary: false,
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.all(20),
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                      crossAxisCount: 2,
+                      children: <Widget>[
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          child: const Text("He'd have you all unravel at the"),
+                          color: Colors.teal[100],
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          child: const Text('Heed not the rabble'),
+                          color: Colors.teal[200],
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          child: const Text('Sound of screams but the'),
+                          color: Colors.teal[300],
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          child: const Text('Who scream'),
+                          color: Colors.teal[400],
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          child: const Text('Who scream'),
+                          color: Colors.teal[400],
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          child: const Text('Who scream'),
+                          color: Colors.teal[400],
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          child: const Text('Who scream'),
+                          color: Colors.teal[400],
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          child: const Text('Who scream'),
+                          color: Colors.teal[400],
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          child: const Text('Who scream'),
+                          color: Colors.teal[400],
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          child: const Text('Revolution is coming...'),
+                          color: Colors.teal[500],
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          child: const Text('Revolution, they...'),
+                          color: Colors.teal[600],
+                        ),
+                      ],
+                    );
+                  }
+                } else {
+                  return CircularProgressIndicator();
+                }
+              }),
         ],
       ),
     ));

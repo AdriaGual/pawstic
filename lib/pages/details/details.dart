@@ -135,7 +135,7 @@ class DetailsState extends State<Details> {
     }
     await http
         .patch(
-          globals.allPublishingsUrl + publish.publishId,
+          globals.allPublishingsUrl + publish.sId,
           headers: <String, String>{
             'Content-Type': 'application/json',
           },
@@ -155,7 +155,7 @@ class DetailsState extends State<Details> {
 
     await http
         .patch(
-          globals.allPublishingsUrl + publish.publishId,
+          globals.allPublishingsUrl + publish.sId,
           headers: <String, String>{
             'Content-Type': 'application/json',
           },
