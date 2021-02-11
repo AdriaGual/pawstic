@@ -94,7 +94,7 @@ class MainState extends State<Main> {
     }
   }
 
-  void determinePosition() async {
+  void sortPublishings() {
     globals.initialOtherPublishings = [];
     for (var a in globals.otherPublishings) {
       double distanceInMeters = Geolocator.distanceBetween(
@@ -105,10 +105,10 @@ class MainState extends State<Main> {
       a.distance = distanceInMeters;
       globals.initialOtherPublishings.add(a);
     }
-
     globals.initialOtherPublishings
         .sort((a, b) => a.distance.compareTo(b.distance));
     globals.otherPublishings = globals.initialOtherPublishings;
+    globals.initialUrgentPublishings = globals.urgentPublishings;
   }
 
   void splitPublishings() async {
@@ -121,8 +121,7 @@ class MainState extends State<Main> {
           .removeRange(3, globals.urgentPublishings.length);
       globals.otherPublishings.removeRange(0, 3);
     }
-    determinePosition();
-    globals.initialUrgentPublishings = globals.urgentPublishings;
+    sortPublishings();
   }
 
   @override
@@ -282,7 +281,11 @@ class MainState extends State<Main> {
                     );
                   }
                 } else {
-                  return CircularProgressIndicator();
+                  return CircularProgressIndicator(
+                    valueColor:
+                        AlwaysStoppedAnimation<Color>(globals.primaryColor),
+                    strokeWidth: 5,
+                  );
                 }
               }),
         ],
