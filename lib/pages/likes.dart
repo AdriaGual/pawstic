@@ -128,7 +128,7 @@ class LikesState extends State<Likes> {
                   style: Theme.of(context).textTheme.headline5),
             ),
           ),
-          SizedBox(height: 10),
+          SizedBox(height: 20),
           TextFormField(
             cursorColor: globals.primaryColor,
             controller: searchText,
@@ -166,7 +166,7 @@ class LikesState extends State<Likes> {
                 filled: true,
                 fillColor: globals.fillGreyColor),
           ),
-          SizedBox(height: 10),
+          SizedBox(height: 15),
           Row(
             children: [
               InkWell(
