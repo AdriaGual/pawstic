@@ -162,30 +162,43 @@ class MainState extends State<Main> {
                     preparePublishings(snapshot, searchText.text);
                     return Column(
                       children: [
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
-                            child: Container(
-                              child: Text('Urgente',
-                                  textAlign: TextAlign.left,
-                                  style: Theme.of(context).textTheme.headline5),
+                        if (globals.urgentPublishings.isNotEmpty)
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
+                              child: Container(
+                                child: Text('Urgente',
+                                    textAlign: TextAlign.left,
+                                    style:
+                                        Theme.of(context).textTheme.headline5),
+                              ),
                             ),
                           ),
-                        ),
-                        HorizontalScroll(),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
-                            child: Container(
-                              child: Text('Cercanos',
-                                  textAlign: TextAlign.left,
-                                  style: Theme.of(context).textTheme.headline5),
+                        if (globals.urgentPublishings.isNotEmpty)
+                          HorizontalScroll(),
+                        if (globals.otherPublishings.isNotEmpty)
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
+                              child: Container(
+                                child: Text('Cercanos',
+                                    textAlign: TextAlign.left,
+                                    style:
+                                        Theme.of(context).textTheme.headline5),
+                              ),
                             ),
                           ),
-                        ),
-                        HorizontalScrollVariant(),
+                        if (globals.otherPublishings.isNotEmpty)
+                          HorizontalScrollVariant()
+                        else
+                          SizedBox(
+                              height: 500,
+                              child: Center(
+                                child:
+                                    Text("No hay publicaciones actualmente 🙀"),
+                              ))
                       ],
                     );
                   }
