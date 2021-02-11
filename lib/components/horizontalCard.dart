@@ -117,94 +117,90 @@ class HorizontalCardState extends State<HorizontalCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        width: this.width,
-        margin: EdgeInsets.fromLTRB(0, 0, 15, 0),
-        alignment: Alignment.topLeft,
-        child: Column(children: [
-          InkWell(
-              // When the user taps the button, show a snackbar.
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Details(publish)),
-                );
-              },
-              child: Container(
-                  width: this.width,
-                  height: this.heigth,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(16.0),
-                    child: Image.network(this.publish.imageUrl.split(',')[0],
-                        fit: BoxFit.cover),
-                  ))),
-          Container(
+    return Column(children: [
+      InkWell(
+          // When the user taps the button, show a snackbar.
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Details(publish)),
+            );
+          },
+          child: Container(
               width: this.width,
-              height: this.secondHeight, //80.0,
-              child: Row(children: [
-                Container(
-                    width: this.secondWidth,
-                    child: Column(children: [
-                      Row(children: [
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(0, 13, 10, 0),
-                          child: Text(this.publish.name,
-                              style: Theme.of(context).textTheme.subtitle1),
-                        ),
-                        if (this.publish.isMale)
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(0, 12, 0, 0),
-                            child: FaIcon(FontAwesomeIcons.mars),
-                          )
-                        else
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(0, 12, 0, 0),
-                            child: FaIcon(FontAwesomeIcons.venus),
-                          )
-                      ]),
-                      if (this.publish.years != 1)
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                              this.publish.breed +
-                                  ', ' +
-                                  this.publish.years.toString() +
-                                  ' años',
-                              style: Theme.of(context).textTheme.subtitle2),
-                        )
-                      else
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                              this.publish.breed +
-                                  ', ' +
-                                  this.publish.years.toString() +
-                                  ' año',
-                              style: Theme.of(context).textTheme.subtitle2),
-                        )
-                    ])),
-                if (publishLikedByUser && userLogged)
-                  InkWell(
-                      // When the user taps the button, show a snackbar.
-                      onTap: () {
-                        disLikePublish();
-                      },
-                      child: Icon(
-                        FontAwesomeIcons.solidHeart,
-                        color: globals.primaryColor,
-                        size: 30,
-                      ))
-                else if (!publishLikedByUser && userLogged)
-                  InkWell(
-                      // When the user taps the button, show a snackbar.
-                      onTap: () {
-                        likePublish();
-                      },
-                      child: Icon(
-                        FontAwesomeIcons.heart,
-                        size: 30,
-                      ))
-              ]))
-        ]));
+              height: this.heigth,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16.0),
+                child: Image.network(this.publish.imageUrl.split(',')[0],
+                    fit: BoxFit.cover),
+              ))),
+      Container(
+          width: this.width,
+          height: this.secondHeight, //80.0,
+          child: Row(children: [
+            Container(
+                width: this.secondWidth,
+                child: Column(children: [
+                  Row(children: [
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(0, 13, 10, 0),
+                      child: Text(this.publish.name,
+                          style: Theme.of(context).textTheme.subtitle1),
+                    ),
+                    if (this.publish.isMale)
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(0, 12, 0, 0),
+                        child: FaIcon(FontAwesomeIcons.mars),
+                      )
+                    else
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(0, 12, 0, 0),
+                        child: FaIcon(FontAwesomeIcons.venus),
+                      )
+                  ]),
+                  if (this.publish.years != 1)
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                          this.publish.breed +
+                              ', ' +
+                              this.publish.years.toString() +
+                              ' años',
+                          style: Theme.of(context).textTheme.subtitle2),
+                    )
+                  else
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                          this.publish.breed +
+                              ', ' +
+                              this.publish.years.toString() +
+                              ' año',
+                          style: Theme.of(context).textTheme.subtitle2),
+                    )
+                ])),
+            if (publishLikedByUser && userLogged)
+              InkWell(
+                  // When the user taps the button, show a snackbar.
+                  onTap: () {
+                    disLikePublish();
+                  },
+                  child: Icon(
+                    FontAwesomeIcons.solidHeart,
+                    color: globals.primaryColor,
+                    size: 30,
+                  ))
+            else if (!publishLikedByUser && userLogged)
+              InkWell(
+                  // When the user taps the button, show a snackbar.
+                  onTap: () {
+                    likePublish();
+                  },
+                  child: Icon(
+                    FontAwesomeIcons.heart,
+                    size: 30,
+                  ))
+          ]))
+    ]);
   }
 }

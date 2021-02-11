@@ -29,8 +29,12 @@ class HorizontalScrollState extends State<HorizontalScroll> {
               return Row(
                 children: <Widget>[
                   if (globals.urgentPublishings[index].imageUrl != null)
-                    HorizontalCard(globals.urgentPublishings[index], 280.0,
-                        235.0, 150.0, 80.0),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(0, 0, 15, 0),
+                      alignment: Alignment.topLeft,
+                      child: HorizontalCard(globals.urgentPublishings[index],
+                          280.0, 235.0, 150.0, 80.0),
+                    )
                 ],
               );
             }),

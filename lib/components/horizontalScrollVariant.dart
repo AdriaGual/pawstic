@@ -30,8 +30,12 @@ class HorizontalScrollVariantState extends State<HorizontalScrollVariant> {
               return Row(
                 children: <Widget>[
                   if (globals.otherPublishings[index].imageUrl != null)
-                    HorizontalCard(globals.otherPublishings[index], 200.0,
-                        170.0, 250.0, 100.0),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(0, 0, 15, 0),
+                      alignment: Alignment.topLeft,
+                      child: HorizontalCard(globals.otherPublishings[index],
+                          200.0, 170.0, 250.0, 100.0),
+                    )
                 ],
               );
             }),

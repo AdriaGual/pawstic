@@ -1,7 +1,10 @@
 import 'dart:core';
 
 import 'package:flutter/material.dart';
-import 'package:pawstic/api/publish_api.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:pawstic/components/horizontalCard.dart';
+import "package:pawstic/globals.dart" as globals;
+import 'package:pawstic/service/loadPublishService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Likes extends StatefulWidget {
@@ -11,19 +14,53 @@ class Likes extends StatefulWidget {
 
 class LikesState extends State<Likes> {
   bool userLogged = false;
-
+  final searchText = TextEditingController();
+  var userId;
+  List<dynamic> likedPublishings = [];
   void initState() {
     super.initState();
     isUserLogged();
   }
 
+  filterBreed(int n) {
+    if (!selectedSpecies.contains(n)) {
+      setState(() {
+        selectedSpecies.add(n);
+      });
+    } else {
+      setState(() {
+        selectedSpecies.remove(n);
+      });
+    }
+    setState(() {});
+  }
+
+  void filterByLiked() {
+    if (globals.publishings.isNotEmpty) {
+      likedPublishings = [];
+      for (var publish in globals.publishings) {
+        print(checkLikes(userId, publish.likedBy.split(",")));
+      }
+    }
+  }
+
+  bool checkLikes(String userId, List<String> likedBy) {
+    bool likedByUser = false;
+
+    for (String likedUser in likedBy) {
+      if (likedUser == userId) likedByUser = true;
+    }
+    return likedByUser;
+  }
+
   Future<Null> isUserLogged() async {
     final prefs = await SharedPreferences.getInstance();
-    final userId = prefs.getString('userId') ?? "";
+    userId = prefs.getString('userId') ?? "";
     if (userId != "") {
       setState(() {
         userLogged = true;
       });
+      filterByLiked();
     } else {
       userLogged = false;
     }
@@ -37,8 +74,9 @@ class LikesState extends State<Likes> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-        child: Padding(
+    return SafeArea(
+        child: SingleChildScrollView(
+            child: Padding(
       padding: EdgeInsets.fromLTRB(30, 0, 30, 30),
       child: Column(
         children: [
@@ -50,87 +88,123 @@ class LikesState extends State<Likes> {
                   style: Theme.of(context).textTheme.headline5),
             ),
           ),
-          FutureBuilder(
-              future: fetchPublishings(false),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  if (snapshot.hasError) {
-                    return Text("API Error");
-                  } else {
-                    print(context);
-                    print(snapshot.data[0].name);
-                    return GridView.count(
-                      primary: false,
-                      shrinkWrap: true,
-                      padding: const EdgeInsets.all(20),
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                      crossAxisCount: 2,
-                      children: <Widget>[
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          child: const Text("He'd have you all unravel at the"),
-                          color: Colors.teal[100],
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          child: const Text('Heed not the rabble'),
-                          color: Colors.teal[200],
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          child: const Text('Sound of screams but the'),
-                          color: Colors.teal[300],
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          child: const Text('Who scream'),
-                          color: Colors.teal[400],
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          child: const Text('Who scream'),
-                          color: Colors.teal[400],
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          child: const Text('Who scream'),
-                          color: Colors.teal[400],
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          child: const Text('Who scream'),
-                          color: Colors.teal[400],
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          child: const Text('Who scream'),
-                          color: Colors.teal[400],
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          child: const Text('Who scream'),
-                          color: Colors.teal[400],
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          child: const Text('Revolution is coming...'),
-                          color: Colors.teal[500],
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          child: const Text('Revolution, they...'),
-                          color: Colors.teal[600],
-                        ),
-                      ],
-                    );
-                  }
-                } else {
-                  return CircularProgressIndicator();
-                }
+          SizedBox(height: 10),
+          TextFormField(
+            cursorColor: globals.primaryColor,
+            controller: searchText,
+            onChanged: (text) {
+              setState(() {});
+            },
+            style: TextStyle(
+                fontFamily: 'PoppinsRegular',
+                fontSize: 17.0,
+                color: globals.titleColor),
+            decoration: InputDecoration(
+                hintText: 'Buscar...',
+                hintStyle: TextStyle(
+                    fontFamily: 'PoppinsRegular',
+                    fontSize: 17.0,
+                    color: globals.greyColor),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.white, width: 2.0),
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                enabledBorder: const OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.white, width: 0.0),
+                  borderRadius: const BorderRadius.all(
+                    const Radius.circular(15.0),
+                  ),
+                ),
+                prefixIcon: Padding(
+                  padding: EdgeInsets.fromLTRB(30, 0, 10, 0),
+                  child: Icon(
+                    FeatherIcons.search,
+                    color: globals.titleColor,
+                  ),
+                ),
+                filled: true,
+                fillColor: globals.fillGreyColor),
+          ),
+          SizedBox(height: 10),
+          Row(
+            children: [
+              InkWell(
+                  onTap: () {
+                    filterBreed(1);
+                  },
+                  child: Text('Perros',
+                      style: TextStyle(
+                          fontFamily: !selectedSpecies.contains(1)
+                              ? 'PoppinsMedium'
+                              : 'PoppinsBold',
+                          fontSize: 16.0,
+                          color: globals.bodyColor))),
+              Spacer(),
+              InkWell(
+                  onTap: () {
+                    filterBreed(2);
+                  },
+                  child: Text('Gatos',
+                      style: TextStyle(
+                          fontFamily: !selectedSpecies.contains(2)
+                              ? 'PoppinsMedium'
+                              : 'PoppinsBold',
+                          fontSize: 16.0,
+                          color: globals.bodyColor))),
+              Spacer(),
+              InkWell(
+                  onTap: () {
+                    filterBreed(3);
+                  },
+                  child: Text('Conejos',
+                      style: TextStyle(
+                          fontFamily: !selectedSpecies.contains(3)
+                              ? 'PoppinsMedium'
+                              : 'PoppinsBold',
+                          fontSize: 16.0,
+                          color: globals.bodyColor))),
+              Spacer(),
+              InkWell(
+                  onTap: () {
+                    filterBreed(4);
+                  },
+                  child: Text('Pájaros',
+                      style: TextStyle(
+                          fontFamily: !selectedSpecies.contains(4)
+                              ? 'PoppinsMedium'
+                              : 'PoppinsBold',
+                          fontSize: 16.0,
+                          color: globals.bodyColor))),
+              Spacer(),
+              InkWell(
+                  onTap: () {
+                    filterBreed(5);
+                  },
+                  child: Text('Otros',
+                      style: TextStyle(
+                          fontFamily: !selectedSpecies.contains(5)
+                              ? 'PoppinsMedium'
+                              : 'PoppinsBold',
+                          fontSize: 16.0,
+                          color: globals.bodyColor))),
+            ],
+          ),
+          SizedBox(height: 20),
+          GridView.builder(
+              shrinkWrap: true,
+              physics: ScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 250,
+                crossAxisSpacing: 15,
+                childAspectRatio: 1.7 / 3,
+              ),
+              itemCount: globals.publishings.length,
+              itemBuilder: (BuildContext ctx, index) {
+                return HorizontalCard(
+                    globals.publishings[index], 300.0, 115.0, 200.0, 70.0);
               }),
         ],
       ),
-    ));
+    )));
   }
 }
