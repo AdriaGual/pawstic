@@ -73,6 +73,7 @@ class HorizontalCardState extends State<HorizontalCard> {
   Future<Null> likePublish() async {
     if (!checkLikes(userId)) {
       likedBy.add(userId);
+      publish.likedBy = likedBy.join(",");
     }
     await http
         .patch(
@@ -92,6 +93,7 @@ class HorizontalCardState extends State<HorizontalCard> {
   Future<Null> disLikePublish() async {
     if (checkLikes(userId)) {
       likedBy.remove(userId);
+      publish.likedBy = likedBy.join(",");
     }
 
     await http
