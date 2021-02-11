@@ -87,14 +87,15 @@ class DetailsState extends State<Details> {
             'Location permissions are denied (actual value: $permission).');
       }
     }
-    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
-        .then((Position position) {
-      setState(() {
-        distance = (Geolocator.distanceBetween(position.latitude,
-                    position.longitude, publish.latitude, publish.longitude) /
-                1000)
-            .toStringAsFixed(1);
-      });
+
+    setState(() {
+      distance = (Geolocator.distanceBetween(
+                  globals.position.latitude,
+                  globals.position.longitude,
+                  publish.latitude,
+                  publish.longitude) /
+              1000)
+          .toStringAsFixed(1);
     });
   }
 

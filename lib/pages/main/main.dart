@@ -1,10 +1,7 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:future_progress_dialog/future_progress_dialog.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:http/http.dart' as http;
+import 'package:pawstic/api/publish_api.dart';
 import 'package:pawstic/components/horizontalScrollVariant.dart';
 import "package:pawstic/globals.dart" as globals;
 
@@ -19,68 +16,11 @@ class Main extends StatefulWidget {
 
 class MainState extends State<Main> {
   List<int> selectedSpecies = [];
-
   double currentDistance;
   @override
   void initState() {
     super.initState();
-    fetchPublishings();
     selectedSpecies = [];
-  }
-
-  void fetchPublishings() async {
-    var result;
-    await Future.delayed(Duration(milliseconds: 50));
-    Future getFuture() {
-      return Future(() async {
-        result = await http.get(globals.allPublishingsUrl);
-        return result;
-      });
-    }
-
-    await showDialog(
-        context: context,
-        child: FutureProgressDialog(
-          getFuture(),
-        ));
-
-    setState(() {
-      globals.publishings = [];
-      globals.urgentPublishings = [];
-      globals.otherPublishings = [];
-      globals.publishings = json.decode(result.body);
-      globals.publishings.sort((a, b) => DateTime.parse(a['dateCreated'])
-          .compareTo(DateTime.parse(b['dateCreated'])));
-      if (globals.publishings.length > 3) {
-        for (var a in globals.publishings) {
-          globals.urgentPublishings.add(a);
-          globals.otherPublishings.add(a);
-        }
-        globals.urgentPublishings
-            .removeRange(3, globals.urgentPublishings.length);
-
-        globals.otherPublishings.removeRange(0, 3);
-      }
-      determinePosition();
-      globals.initialUrgentPublishings = globals.urgentPublishings;
-    });
-  }
-
-  void determinePosition() async {
-    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
-        .then((Position position) {
-      for (var a in globals.otherPublishings) {
-        double distanceInMeters = Geolocator.distanceBetween(position.latitude,
-            position.longitude, a['latitude'], a['longitude']);
-        a['distance'] = distanceInMeters;
-        globals.initialOtherPublishings.add(a);
-      }
-      setState(() {
-        globals.initialOtherPublishings
-            .sort((a, b) => a['distance'].compareTo(b['distance']));
-        globals.otherPublishings = globals.initialOtherPublishings;
-      });
-    });
   }
 
   filterBreed(int n) {
@@ -102,14 +42,14 @@ class MainState extends State<Main> {
     if (selectedSpecies.isNotEmpty) {
       List<dynamic> filteredUrgentPublishings = [];
       for (var publish in globals.urgentPublishings) {
-        if (selectedSpecies.contains(publish['species'])) {
+        if (selectedSpecies.contains(publish.species)) {
           filteredUrgentPublishings.add(publish);
         }
       }
 
       List<dynamic> filteredOtherPublishings = [];
       for (var publish in globals.otherPublishings) {
-        if (selectedSpecies.contains(publish['species'])) {
+        if (selectedSpecies.contains(publish.species)) {
           filteredOtherPublishings.add(publish);
         }
       }
@@ -131,13 +71,13 @@ class MainState extends State<Main> {
       List<dynamic> filteredUrgentPublishings = [];
       List<dynamic> filteredOtherPublishings = [];
       for (var publish in globals.urgentPublishings) {
-        if (publish['name'].contains(text)) {
+        if (publish.name.contains(text)) {
           filteredUrgentPublishings.add(publish);
         }
       }
 
       for (var publish in globals.otherPublishings) {
-        if (publish['name'].contains(text)) {
+        if (publish.name.contains(text)) {
           filteredOtherPublishings.add(publish);
         }
       }
@@ -152,6 +92,37 @@ class MainState extends State<Main> {
         globals.otherPublishings = globals.initialOtherPublishings;
       });
     }
+  }
+
+  void determinePosition() async {
+    globals.initialOtherPublishings = [];
+    for (var a in globals.otherPublishings) {
+      double distanceInMeters = Geolocator.distanceBetween(
+          globals.position.latitude,
+          globals.position.longitude,
+          a.latitude,
+          a.longitude);
+      a.distance = distanceInMeters;
+      globals.initialOtherPublishings.add(a);
+    }
+
+    globals.initialOtherPublishings
+        .sort((a, b) => a.distance.compareTo(b.distance));
+    globals.otherPublishings = globals.initialOtherPublishings;
+  }
+
+  void splitPublishings() async {
+    if (globals.publishings.length > 3) {
+      for (var a in globals.publishings) {
+        globals.urgentPublishings.add(a);
+        globals.otherPublishings.add(a);
+      }
+      globals.urgentPublishings
+          .removeRange(3, globals.urgentPublishings.length);
+      globals.otherPublishings.removeRange(0, 3);
+    }
+    determinePosition();
+    globals.initialUrgentPublishings = globals.urgentPublishings;
   }
 
   @override
@@ -266,30 +237,54 @@ class MainState extends State<Main> {
               ],
             ),
           ),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
-              child: Container(
-                child: Text('Urgente',
-                    textAlign: TextAlign.left,
-                    style: Theme.of(context).textTheme.headline5),
-              ),
-            ),
-          ),
-          HorizontalScroll(globals.urgentPublishings),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
-              child: Container(
-                child: Text('Cercanos',
-                    textAlign: TextAlign.left,
-                    style: Theme.of(context).textTheme.headline5),
-              ),
-            ),
-          ),
-          HorizontalScrollVariant(),
+          FutureBuilder(
+              future: fetchPublishings(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasError) {
+                    return Text("API Error");
+                  } else {
+                    globals.publishings = [];
+                    globals.urgentPublishings = [];
+                    globals.otherPublishings = [];
+                    globals.publishings = snapshot.data;
+                    globals.publishings.sort((a, b) =>
+                        DateTime.parse(a.dateCreated)
+                            .compareTo(DateTime.parse(b.dateCreated)));
+                    splitPublishings();
+                    return Column(
+                      children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
+                            child: Container(
+                              child: Text('Urgente',
+                                  textAlign: TextAlign.left,
+                                  style: Theme.of(context).textTheme.headline5),
+                            ),
+                          ),
+                        ),
+                        HorizontalScroll(),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
+                            child: Container(
+                              child: Text('Cercanos',
+                                  textAlign: TextAlign.left,
+                                  style: Theme.of(context).textTheme.headline5),
+                            ),
+                          ),
+                        ),
+                        HorizontalScrollVariant(),
+                      ],
+                    );
+                  }
+                } else {
+                  return CircularProgressIndicator();
+                }
+              }),
         ],
       ),
     ));

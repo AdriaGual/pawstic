@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:geolocator/geolocator.dart';
+
 import 'model/specie.dart';
 
 Color bodyColor = HexColor.fromHex('#4E4B66');
@@ -26,6 +28,7 @@ List<dynamic> urgentPublishings = [];
 List<dynamic> otherPublishings = [];
 List<dynamic> initialUrgentPublishings = [];
 List<dynamic> initialOtherPublishings = [];
+Position position;
 void openDrawer() {
   xOffset = 230;
   yOffset = 150;

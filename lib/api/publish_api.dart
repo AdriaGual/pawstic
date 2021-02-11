@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:pawstic/api/position_api.dart';
 import "package:pawstic/globals.dart" as globals;
 import 'package:pawstic/model/publish.dart';
 
@@ -13,6 +14,8 @@ List<Publish> parsePublish(String responseBody) {
 }
 
 Future<List<Publish>> fetchPublishings() async {
+  getPosition();
+
   final response = await http.get(globals.allPublishingsUrl);
   if (response.statusCode == 200) {
     return compute(parsePublish, response.body);

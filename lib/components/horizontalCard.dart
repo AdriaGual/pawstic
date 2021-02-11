@@ -9,7 +9,7 @@ import 'package:pawstic/pages/details/details.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HorizontalCard extends StatefulWidget {
-  final Map initialPublish;
+  final Publish initialPublish;
   final double width;
   final double secondWidth;
   final double secondHeight;
@@ -27,7 +27,7 @@ class HorizontalCard extends StatefulWidget {
 }
 
 class HorizontalCardState extends State<HorizontalCard> {
-  Map initialPublish;
+  Publish initialPublish;
   double width;
   double secondWidth;
   double secondHeight;
@@ -43,7 +43,7 @@ class HorizontalCardState extends State<HorizontalCard> {
   @override
   void initState() {
     super.initState();
-    publish = Publish.fromJson(initialPublish);
+    publish = initialPublish;
     isUserLogged();
   }
 

@@ -14,7 +14,7 @@ class Publish {
   String dateCreated;
   String likedBy;
   int iV;
-
+  double distance = 0.0;
   Publish(
       {this.sId,
       this.name,

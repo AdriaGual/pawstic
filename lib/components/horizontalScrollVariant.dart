@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import "package:pawstic/globals.dart" as globals;
-import 'package:pawstic/model/publish.dart';
 
 import 'horizontalCard.dart';
 
@@ -30,9 +29,7 @@ class HorizontalScrollVariantState extends State<HorizontalScrollVariant> {
             itemBuilder: (BuildContext context, int index) {
               return Row(
                 children: <Widget>[
-                  if (Publish.fromJson(globals.otherPublishings[index])
-                          .imageUrl !=
-                      null)
+                  if (globals.otherPublishings[index].imageUrl != null)
                     HorizontalCard(globals.otherPublishings[index], 200.0,
                         170.0, 250.0, 100.0),
                 ],

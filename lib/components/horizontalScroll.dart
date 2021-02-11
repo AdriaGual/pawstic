@@ -1,22 +1,16 @@
 import 'package:flutter/material.dart';
 import "package:pawstic/globals.dart" as globals;
-import 'package:pawstic/model/publish.dart';
 
 import 'horizontalCard.dart';
 
 class HorizontalScroll extends StatefulWidget {
-  List<dynamic> urgentPublishings = [];
-  HorizontalScroll(this.urgentPublishings);
+  HorizontalScroll();
 
   @override
-  State<StatefulWidget> createState() =>
-      HorizontalScrollState(this.urgentPublishings);
+  State<StatefulWidget> createState() => HorizontalScrollState();
 }
 
 class HorizontalScrollState extends State<HorizontalScroll> {
-  List<dynamic> urgentPublishings = [];
-  HorizontalScrollState(this.urgentPublishings);
-
   @override
   void initState() {
     super.initState();
@@ -34,9 +28,7 @@ class HorizontalScrollState extends State<HorizontalScroll> {
             itemBuilder: (BuildContext context, int index) {
               return Row(
                 children: <Widget>[
-                  if (Publish.fromJson(globals.urgentPublishings[index])
-                          .imageUrl !=
-                      null)
+                  if (globals.urgentPublishings[index].imageUrl != null)
                     HorizontalCard(globals.urgentPublishings[index], 280.0,
                         235.0, 150.0, 80.0),
                 ],
