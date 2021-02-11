@@ -13,13 +13,16 @@ List<Publish> parsePublish(String responseBody) {
   return publishings;
 }
 
-Future<List<Publish>> fetchPublishings() async {
+Future<List<Publish>> fetchPublishings(bool force) async {
   getPosition();
-
-  final response = await http.get(globals.allPublishingsUrl);
-  if (response.statusCode == 200) {
-    return compute(parsePublish, response.body);
+  if (globals.otherPublishings.isEmpty || force) {
+    final response = await http.get(globals.allPublishingsUrl);
+    if (response.statusCode == 200) {
+      return compute(parsePublish, response.body);
+    } else {
+      throw Exception('Request API Error');
+    }
   } else {
-    throw Exception('Request API Error');
+    return globals.publishings;
   }
 }

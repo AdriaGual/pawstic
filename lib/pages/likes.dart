@@ -51,7 +51,7 @@ class LikesState extends State<Likes> {
             ),
           ),
           FutureBuilder(
-              future: fetchPublishings(),
+              future: fetchPublishings(false),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasError) {

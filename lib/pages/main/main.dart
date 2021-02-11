@@ -4,6 +4,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:pawstic/api/publish_api.dart';
 import 'package:pawstic/components/horizontalScrollVariant.dart';
 import "package:pawstic/globals.dart" as globals;
+import 'package:pawstic/model/publish.dart';
 
 import '../../components/horizontalScroll.dart';
 
@@ -17,10 +18,13 @@ class Main extends StatefulWidget {
 class MainState extends State<Main> {
   List<int> selectedSpecies = [];
   double currentDistance;
+  Future<List<Publish>> publishings;
+  final searchText = TextEditingController();
   @override
   void initState() {
     super.initState();
     selectedSpecies = [];
+    publishings = fetchPublishings(false);
   }
 
   filterBreed(int n) {
@@ -28,14 +32,12 @@ class MainState extends State<Main> {
       setState(() {
         selectedSpecies.add(n);
       });
-
-      filterBySpecies();
     } else {
       setState(() {
         selectedSpecies.remove(n);
       });
-      filterBySpecies();
     }
+    setState(() {});
   }
 
   filterBySpecies() {
@@ -54,15 +56,11 @@ class MainState extends State<Main> {
         }
       }
 
-      setState(() {
-        globals.urgentPublishings = filteredUrgentPublishings;
-        globals.otherPublishings = filteredOtherPublishings;
-      });
+      globals.urgentPublishings = filteredUrgentPublishings;
+      globals.otherPublishings = filteredOtherPublishings;
     } else {
-      setState(() {
-        globals.urgentPublishings = globals.initialUrgentPublishings;
-        globals.otherPublishings = globals.initialOtherPublishings;
-      });
+      globals.urgentPublishings = globals.initialUrgentPublishings;
+      globals.otherPublishings = globals.initialOtherPublishings;
     }
   }
 
@@ -82,33 +80,22 @@ class MainState extends State<Main> {
         }
       }
 
-      setState(() {
-        globals.urgentPublishings = filteredUrgentPublishings;
-        globals.otherPublishings = filteredOtherPublishings;
-      });
-    } else {
-      setState(() {
-        globals.urgentPublishings = globals.initialUrgentPublishings;
-        globals.otherPublishings = globals.initialOtherPublishings;
-      });
+      globals.urgentPublishings = filteredUrgentPublishings;
+      globals.otherPublishings = filteredOtherPublishings;
+    } else if (selectedSpecies.isEmpty) {
+      globals.urgentPublishings = globals.initialUrgentPublishings;
+      globals.otherPublishings = globals.initialOtherPublishings;
     }
   }
 
-  void sortPublishings() {
-    globals.initialOtherPublishings = [];
-    for (var a in globals.otherPublishings) {
-      double distanceInMeters = Geolocator.distanceBetween(
-          globals.position.latitude,
-          globals.position.longitude,
-          a.latitude,
-          a.longitude);
-      a.distance = distanceInMeters;
-      globals.initialOtherPublishings.add(a);
-    }
-    globals.initialOtherPublishings
-        .sort((a, b) => a.distance.compareTo(b.distance));
-    globals.otherPublishings = globals.initialOtherPublishings;
-    globals.initialUrgentPublishings = globals.urgentPublishings;
+  void preparePublishings(AsyncSnapshot snapshot) {
+    globals.publishings = [];
+    globals.urgentPublishings = [];
+    globals.otherPublishings = [];
+    globals.publishings = snapshot.data;
+    globals.publishings.sort((a, b) =>
+        DateTime.parse(a.dateCreated).compareTo(DateTime.parse(b.dateCreated)));
+    splitPublishings();
   }
 
   void splitPublishings() async {
@@ -124,6 +111,28 @@ class MainState extends State<Main> {
     sortPublishings();
   }
 
+  void sortPublishings() {
+    if (globals.position != null) {
+      globals.initialOtherPublishings = [];
+      for (var a in globals.otherPublishings) {
+        double distanceInMeters = Geolocator.distanceBetween(
+            globals.position.latitude,
+            globals.position.longitude,
+            a.latitude,
+            a.longitude);
+        a.distance = distanceInMeters;
+        globals.initialOtherPublishings.add(a);
+      }
+      globals.initialOtherPublishings
+          .sort((a, b) => a.distance.compareTo(b.distance));
+      globals.otherPublishings = globals.initialOtherPublishings;
+    }
+
+    globals.initialUrgentPublishings = globals.urgentPublishings;
+    filterBySpecies();
+    filterPublishings(searchText.text);
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -134,6 +143,10 @@ class MainState extends State<Main> {
             padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
             child: TextFormField(
               cursorColor: globals.primaryColor,
+              controller: searchText,
+              onChanged: (text) {
+                setState(() {});
+              },
               style: TextStyle(
                   fontFamily: 'PoppinsRegular',
                   fontSize: 17.0,
@@ -165,9 +178,6 @@ class MainState extends State<Main> {
                   ),
                   filled: true,
                   fillColor: globals.fillGreyColor),
-              onChanged: (text) {
-                filterPublishings(text);
-              },
             ),
           ),
           Padding(
@@ -237,20 +247,13 @@ class MainState extends State<Main> {
             ),
           ),
           FutureBuilder(
-              future: fetchPublishings(),
+              future: publishings,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasError) {
                     return Text("API Error");
                   } else {
-                    globals.publishings = [];
-                    globals.urgentPublishings = [];
-                    globals.otherPublishings = [];
-                    globals.publishings = snapshot.data;
-                    globals.publishings.sort((a, b) =>
-                        DateTime.parse(a.dateCreated)
-                            .compareTo(DateTime.parse(b.dateCreated)));
-                    splitPublishings();
+                    preparePublishings(snapshot);
                     return Column(
                       children: [
                         Align(
@@ -281,11 +284,15 @@ class MainState extends State<Main> {
                     );
                   }
                 } else {
-                  return CircularProgressIndicator(
-                    valueColor:
-                        AlwaysStoppedAnimation<Color>(globals.primaryColor),
-                    strokeWidth: 5,
-                  );
+                  return SizedBox(
+                      height: 500.0,
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                              globals.primaryColor),
+                          strokeWidth: 5,
+                        ),
+                      ));
                 }
               }),
         ],
