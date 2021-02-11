@@ -72,8 +72,10 @@ class HorizontalCardState extends State<HorizontalCard> {
 
   Future<Null> likePublish() async {
     if (!checkLikes(userId)) {
-      likedBy.add(userId);
-      publish.likedBy = likedBy.join(",");
+      setState(() {
+        likedBy.add(userId);
+        publish.likedBy = likedBy.join(",");
+      });
     }
     await http
         .patch(

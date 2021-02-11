@@ -17,6 +17,7 @@ class LikesState extends State<Likes> {
   final searchText = TextEditingController();
   var userId;
   List<dynamic> likedPublishings = [];
+  List<dynamic> initialLikedPublishings = [];
   void initState() {
     super.initState();
     isUserLogged();
@@ -32,15 +33,54 @@ class LikesState extends State<Likes> {
         selectedSpecies.remove(n);
       });
     }
-    setState(() {});
+    filterByName(searchText.text);
+    filterSpecies();
+  }
+
+  void filterSpecies() {
+    List<dynamic> filteredPublishings = [];
+    if (selectedSpecies.isNotEmpty) {
+      for (var publish in likedPublishings) {
+        if (selectedSpecies.contains(publish.species)) {
+          filteredPublishings.add(publish);
+        }
+      }
+      setState(() {
+        likedPublishings = filteredPublishings;
+      });
+    } else if (searchText.text.isEmpty && selectedSpecies.isEmpty) {
+      setState(() {
+        likedPublishings = initialLikedPublishings;
+      });
+    }
+  }
+
+  void filterByName(String text) {
+    setState(() {
+      likedPublishings = initialLikedPublishings;
+    });
+    if (text.isNotEmpty) {
+      List<dynamic> filteredPublishings = [];
+      for (var publish in likedPublishings) {
+        if (publish.name.contains(text)) {
+          filteredPublishings.add(publish);
+        }
+      }
+      setState(() {
+        likedPublishings = filteredPublishings;
+      });
+    }
   }
 
   void filterByLiked() {
     if (globals.publishings.isNotEmpty) {
       likedPublishings = [];
       for (var publish in globals.publishings) {
-        print(checkLikes(userId, publish.likedBy.split(",")));
+        if (checkLikes(userId, publish.likedBy.split(","))) {
+          likedPublishings.add(publish);
+        }
       }
+      initialLikedPublishings = likedPublishings;
     }
   }
 
@@ -93,7 +133,8 @@ class LikesState extends State<Likes> {
             cursorColor: globals.primaryColor,
             controller: searchText,
             onChanged: (text) {
-              setState(() {});
+              filterByName(text);
+              filterSpecies();
             },
             style: TextStyle(
                 fontFamily: 'PoppinsRegular',
@@ -190,19 +231,26 @@ class LikesState extends State<Likes> {
             ],
           ),
           SizedBox(height: 20),
-          GridView.builder(
-              shrinkWrap: true,
-              physics: ScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 250,
-                crossAxisSpacing: 15,
-                childAspectRatio: 1.7 / 3,
-              ),
-              itemCount: globals.publishings.length,
-              itemBuilder: (BuildContext ctx, index) {
-                return HorizontalCard(
-                    globals.publishings[index], 300.0, 115.0, 200.0, 70.0);
-              }),
+          if (likedPublishings.isNotEmpty)
+            GridView.builder(
+                shrinkWrap: true,
+                physics: ScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 250,
+                  crossAxisSpacing: 15,
+                  childAspectRatio: 1.7 / 3,
+                ),
+                itemCount: likedPublishings.length,
+                itemBuilder: (BuildContext ctx, index) {
+                  return HorizontalCard(
+                      likedPublishings[index], 300.0, 115.0, 200.0, 70.0);
+                })
+          else
+            SizedBox(
+                height: 400.0,
+                child: Center(
+                  child: Text("No hay publicaciones actualmente 🙀"),
+                ))
         ],
       ),
     )));
