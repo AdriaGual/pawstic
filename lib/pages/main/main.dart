@@ -44,6 +44,7 @@ class MainState extends State<Main> {
     return SafeArea(
         child: SingleChildScrollView(
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
             padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
@@ -161,6 +162,7 @@ class MainState extends State<Main> {
                   } else {
                     preparePublishings(snapshot, searchText.text);
                     return Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         if (globals.urgentPublishings.isNotEmpty)
                           Align(
@@ -194,7 +196,7 @@ class MainState extends State<Main> {
                           HorizontalScrollVariant()
                         else
                           SizedBox(
-                              height: 500,
+                              height: 500.0,
                               child: Center(
                                 child:
                                     Text("No hay publicaciones actualmente 🙀"),
