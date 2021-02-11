@@ -29,12 +29,6 @@ List<dynamic> otherPublishings = [];
 List<dynamic> initialUrgentPublishings = [];
 List<dynamic> initialOtherPublishings = [];
 Position position;
-void openDrawer() {
-  xOffset = 230;
-  yOffset = 150;
-  scaleFactor = 0.6;
-  isDrawerOpen = true;
-}
 
 List<Specie> speciesItems = [
   Specie(1, "Perro"),
@@ -43,6 +37,13 @@ List<Specie> speciesItems = [
   Specie(4, "Pájaro"),
   Specie(5, "Otro")
 ];
+
+void openDrawer() {
+  xOffset = 230;
+  yOffset = 150;
+  scaleFactor = 0.6;
+  isDrawerOpen = true;
+}
 
 void closeDrawer() {
   xOffset = 0;
