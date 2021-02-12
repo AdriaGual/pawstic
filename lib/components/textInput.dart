@@ -34,11 +34,13 @@ class TextInputState extends State<TextInput> {
       controller: this.controller,
       cursorColor: globals.primaryColor,
       obscureText: this.obscureText,
-      readOnly: !editingProfile,
+      readOnly: !editingProfile && this.readOnly,
       style: TextStyle(
           fontFamily: 'PoppinsRegular',
           fontSize: 17.0,
-          color: !editingProfile ? globals.greyColor : globals.titleColor),
+          color: !editingProfile && this.readOnly
+              ? globals.greyColor
+              : globals.titleColor),
       decoration: InputDecoration(
           hintText: this.text,
           contentPadding: EdgeInsets.all(20.0),
