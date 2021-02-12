@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:pawstic/components/drawerItem.dart';
 import "package:pawstic/globals.dart" as globals;
 import 'package:pawstic/pages/login/login.dart';
+import 'package:pawstic/pages/myPublishings/myPublishings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'homeWrapper.dart';
@@ -84,6 +85,28 @@ class DrawerWrapperState extends State<DrawerWrapper> {
                       );
                     },
                     child: DrawerItem('Mensajes', FeatherIcons.messageCircle)),
+              if (userLogged)
+                InkWell(
+                    onTap: () {
+                      globals.isDrawerOpen = false;
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MyPublishings()),
+                      );
+                    },
+                    child: DrawerItem('Mis anuncios', FeatherIcons.archive)),
+              if (userLogged)
+                InkWell(
+                    onTap: () {
+                      globals.isDrawerOpen = false;
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Login()),
+                      );
+                    },
+                    child: DrawerItem('Perfil', FeatherIcons.user)),
               if (userLogged)
                 InkWell(
                     onTap: () {

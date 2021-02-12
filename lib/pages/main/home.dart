@@ -5,7 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import "package:pawstic/globals.dart" as globals;
 import 'package:pawstic/pages/publish/publish1.dart';
 
-import '../likes.dart';
+import '../likes/likes.dart';
 import 'main.dart';
 
 class Home extends StatefulWidget {
