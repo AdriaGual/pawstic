@@ -11,6 +11,7 @@ import "package:pawstic/globals.dart" as globals;
 import 'package:pawstic/model/publish.dart';
 import 'package:pawstic/model/user.dart';
 import 'package:pawstic/pages/main/homeWrapper.dart';
+import 'package:pawstic/service/timeConverterService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Details extends StatefulWidget {
@@ -30,7 +31,6 @@ class DetailsState extends State<Details> {
   bool userLogged = false;
   List<String> likedBy = [];
   bool publishLikedByUser = false;
-  var publishDate;
   String timeFromPublish = "";
   String distance = "0";
   Future<User> user;
@@ -38,32 +38,10 @@ class DetailsState extends State<Details> {
   void initState() {
     super.initState();
     images = this.publish.imageUrl.split(',');
-    calculateTime();
     determinePosition();
+    timeFromPublish = calculateTime(this.publish.dateCreated);
     isUserLogged();
     user = fetchUser(publish.userId);
-  }
-
-  void calculateTime() {
-    publishDate = DateTime.parse(this.publish.dateCreated);
-    DateTime dateTimeNow = DateTime.now();
-    final differenceInDays = dateTimeNow.difference(publishDate).inDays;
-    final differenceInHours = dateTimeNow.difference(publishDate).inHours;
-    final differenceInMinutes = dateTimeNow.difference(publishDate).inMinutes;
-    if (differenceInDays == 0) {
-      if (differenceInHours == 0) {
-        if (differenceInMinutes == 0) {
-          timeFromPublish = "justo ahora";
-        } else {
-          timeFromPublish =
-              "hace " + differenceInMinutes.toString() + " minuto/s";
-        }
-      } else {
-        timeFromPublish = "hace " + differenceInHours.toString() + " hora/s";
-      }
-    } else {
-      timeFromPublish = "hace " + differenceInDays.toString() + " día/s";
-    }
   }
 
   void determinePosition() async {
