@@ -6,6 +6,7 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
+import 'package:pawstic/api/user_api.dart';
 import "package:pawstic/globals.dart" as globals;
 import 'package:pawstic/model/publish.dart';
 import 'package:pawstic/model/user.dart';
@@ -24,7 +25,7 @@ class DetailsState extends State<Details> {
   Publish publish;
   DetailsState(this.publish);
   List<String> images;
-  var user;
+
   var userId;
   bool userLogged = false;
   List<String> likedBy = [];
@@ -32,14 +33,15 @@ class DetailsState extends State<Details> {
   var publishDate;
   String timeFromPublish = "";
   String distance = "0";
+  Future<User> user;
   @override
   void initState() {
     super.initState();
     images = this.publish.imageUrl.split(',');
     calculateTime();
     determinePosition();
-    fetchUser();
     isUserLogged();
+    user = fetchUser(publish.userId);
   }
 
   void calculateTime() {
@@ -67,7 +69,6 @@ class DetailsState extends State<Details> {
   void determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
-
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       return Future.error('Location services are disabled.');
@@ -120,14 +121,6 @@ class DetailsState extends State<Details> {
       if (likedUser == userId) likedByUser = true;
     }
     return likedByUser;
-  }
-
-  Future<Null> fetchUser() async {
-    var result = await http.get(globals.allUsersUrl + publish.userId);
-    setState(() {
-      user = json.decode(result.body);
-      user = User.fromJson(user);
-    });
   }
 
   Future<Null> likePublish() async {
@@ -338,35 +331,65 @@ class DetailsState extends State<Details> {
                               SizedBox(
                                 height: 20,
                               ),
-                              Row(children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(16.0),
-                                  child: Image.asset(
-                                    'assets/images/onBoarding/onBoarding3.png',
-                                    width: 60.0,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 20,
-                                ),
-                                Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      if (user != null)
-                                        Text(user.name,
-                                            style: TextStyle(
-                                                fontFamily: 'PoppinsSemiBold',
-                                                fontSize: 16.0,
-                                                color: globals.titleColor)),
-                                      Text(timeFromPublish,
-                                          style: TextStyle(
-                                              fontFamily: 'PoppinsRegular',
-                                              fontSize: 14.0,
-                                              color: globals.bodyColor)),
-                                    ]),
-                              ]),
+                              FutureBuilder(
+                                  future: user,
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.done) {
+                                      if (snapshot.hasError) {
+                                        return Text("API Error");
+                                      } else {
+                                        var fetchedUser = snapshot.data;
+                                        return Row(children: [
+                                          ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(16.0),
+                                            child: Image.network(
+                                              fetchedUser.imageUrl,
+                                              width: 60.0,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 20,
+                                          ),
+                                          Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                if (fetchedUser != null)
+                                                  Text(fetchedUser.name,
+                                                      style: TextStyle(
+                                                          fontFamily:
+                                                              'PoppinsSemiBold',
+                                                          fontSize: 16.0,
+                                                          color: globals
+                                                              .titleColor)),
+                                                Text(fetchedUser.email,
+                                                    style: TextStyle(
+                                                        fontFamily:
+                                                            'PoppinsRegular',
+                                                        fontSize: 14.0,
+                                                        color:
+                                                            globals.bodyColor)),
+                                              ]),
+                                          Spacer(),
+                                          Text(timeFromPublish,
+                                              style: TextStyle(
+                                                  fontFamily: 'PoppinsRegular',
+                                                  fontSize: 14.0,
+                                                  color: globals.bodyColor)),
+                                        ]);
+                                      }
+                                    } else {
+                                      return CircularProgressIndicator(
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                                globals.primaryColor),
+                                        strokeWidth: 5,
+                                      );
+                                    }
+                                  }),
                               SizedBox(height: 20),
                               Row(children: [
                                 Spacer(),

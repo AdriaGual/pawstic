@@ -5,6 +5,7 @@ import 'package:pawstic/components/drawerItem.dart';
 import "package:pawstic/globals.dart" as globals;
 import 'package:pawstic/pages/login/login.dart';
 import 'package:pawstic/pages/myPublishings/myPublishings.dart';
+import 'package:pawstic/pages/profile/profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'homeWrapper.dart';
@@ -103,7 +104,7 @@ class DrawerWrapperState extends State<DrawerWrapper> {
                       globals.isDrawerOpen = false;
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Login()),
+                        MaterialPageRoute(builder: (context) => Profile()),
                       );
                     },
                     child: DrawerItem('Perfil', FeatherIcons.user)),
