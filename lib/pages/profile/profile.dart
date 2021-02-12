@@ -17,7 +17,7 @@ class Profile extends StatefulWidget {
 class ProfileState extends State<Profile> {
   Future<User> user;
   final name = TextEditingController();
-
+  final email = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -28,6 +28,7 @@ class ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false, // set it to false
       body: SafeArea(
           child: FutureBuilder(
               future: user,
@@ -56,6 +57,7 @@ class ProfileState extends State<Profile> {
                                   size: 30,
                                 ),
                                 onPressed: () {
+                                  editingProfile = false;
                                   globals.selectedIndex = 0;
                                   globals.isDrawerOpen = false;
                                   Navigator.push(
@@ -84,10 +86,109 @@ class ProfileState extends State<Profile> {
                                       child: Column(
                                         children: [
                                           TextInput(name, fetchedUser.name,
-                                              false, true),
+                                              false, editingProfile),
                                           SizedBox(height: 20),
-                                          TextInput(name, fetchedUser.email,
-                                              false, true),
+                                          TextInput(email, fetchedUser.email,
+                                              false, !editingProfile),
+                                          SizedBox(height: 20),
+                                          SizedBox(
+                                              width: 330.0,
+                                              height: 65.0,
+                                              child: OutlinedButton(
+                                                style: OutlinedButton.styleFrom(
+                                                  textStyle: TextStyle(
+                                                      fontSize: 18,
+                                                      fontFamily:
+                                                          'PoppinsSemiBold'),
+                                                  primary: editingProfile
+                                                      ? globals.primaryColor
+                                                      : Colors.white,
+                                                  backgroundColor:
+                                                      editingProfile
+                                                          ? Colors.white
+                                                          : globals
+                                                              .primaryColor,
+                                                  side: BorderSide(
+                                                      color:
+                                                          globals.primaryColor,
+                                                      width: 4),
+                                                  shape:
+                                                      const RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          15))),
+                                                ),
+                                                onPressed: () {
+                                                  if (editingProfile) {
+                                                    updateUser(
+                                                        name.text, email.text);
+                                                  }
+                                                  setState(() {
+                                                    editingProfile =
+                                                        !editingProfile;
+                                                  });
+                                                },
+                                                child: editingProfile
+                                                    ? Text('Guardar Cambios')
+                                                    : Text('Editar Perfil'),
+                                              )),
+                                          SizedBox(height: 20),
+                                          SizedBox(
+                                              width: 330.0,
+                                              height: 65.0,
+                                              child: OutlinedButton(
+                                                style: OutlinedButton.styleFrom(
+                                                  textStyle: TextStyle(
+                                                      fontSize: 18,
+                                                      fontFamily:
+                                                          'PoppinsSemiBold'),
+                                                  primary: globals.primaryColor,
+                                                  backgroundColor: Colors.white,
+                                                  side: BorderSide(
+                                                      color:
+                                                          globals.primaryColor,
+                                                      width: 4),
+                                                  shape:
+                                                      const RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          15))),
+                                                ),
+                                                onPressed: () {},
+                                                child:
+                                                    Text('Cambiar Fotografia'),
+                                              )),
+                                          SizedBox(height: 20),
+                                          SizedBox(
+                                              width: 330.0,
+                                              height: 65.0,
+                                              child: OutlinedButton(
+                                                style: OutlinedButton.styleFrom(
+                                                  textStyle: TextStyle(
+                                                      fontSize: 18,
+                                                      fontFamily:
+                                                          'PoppinsSemiBold'),
+                                                  primary: globals.primaryColor,
+                                                  backgroundColor: Colors.white,
+                                                  side: BorderSide(
+                                                      color:
+                                                          globals.primaryColor,
+                                                      width: 4),
+                                                  shape:
+                                                      const RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          15))),
+                                                ),
+                                                onPressed: () {},
+                                                child: Text('Eliminar Cuenta'),
+                                              ))
                                         ],
                                       )))))
                     ],

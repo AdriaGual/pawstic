@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pawstic/api/user_api.dart';
 import "package:pawstic/globals.dart" as globals;
 
 class TextInput extends StatefulWidget {
@@ -33,18 +34,18 @@ class TextInputState extends State<TextInput> {
       controller: this.controller,
       cursorColor: globals.primaryColor,
       obscureText: this.obscureText,
-      readOnly: this.readOnly,
+      readOnly: !editingProfile,
       style: TextStyle(
           fontFamily: 'PoppinsRegular',
           fontSize: 17.0,
-          color: globals.titleColor),
+          color: !editingProfile ? globals.greyColor : globals.titleColor),
       decoration: InputDecoration(
           hintText: this.text,
           contentPadding: EdgeInsets.all(20.0),
           hintStyle: TextStyle(
               fontFamily: 'PoppinsRegular',
               fontSize: 17.0,
-              color: globals.greyColor),
+              color: !editingProfile ? globals.greyColor : globals.titleColor),
           focusedBorder: OutlineInputBorder(
             borderSide: const BorderSide(color: Colors.white, width: 2.0),
             borderRadius: BorderRadius.circular(15.0),

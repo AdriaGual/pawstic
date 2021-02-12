@@ -249,7 +249,8 @@ class LikesState extends State<Likes> {
             SizedBox(
                 height: 400.0,
                 child: Center(
-                  child: Text("No hay publicaciones actualmente 🙀"),
+                  child:
+                      Text("No hay publicaciones que te gusten actualmente 🙀"),
                 )),
           SizedBox(height: 150),
         ],

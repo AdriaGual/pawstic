@@ -9,6 +9,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 var userId;
 bool userLogged = false;
 
+bool editingProfile = false;
+
 User parseUser(String responseBody) {
   var userJson = json.decode(responseBody);
   User user = User.fromJson(userJson);
@@ -32,4 +34,19 @@ Future<Null> isUserLogged() async {
   } else {
     userLogged = false;
   }
+}
+
+Future<Null> updateUser(String name, String email) async {
+  await http
+      .patch(
+        globals.allUsersUrl + userId,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(<String, String>{
+          'name': name,
+          'email': email,
+        }),
+      )
+      .then((value) => print(value.toString()));
 }
