@@ -88,7 +88,7 @@ class ForgotPasswordState extends State<ForgotPassword> {
                     ),
                   ),
                   SizedBox(height: 20),
-                  TextInput(email, 'Email', false),
+                  TextInput(email, 'Email', false, false),
                   SizedBox(height: 20),
                   SizedBox(
                     width: 200.0,

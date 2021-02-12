@@ -26,8 +26,6 @@ class Publish1State extends State<Publish1> {
   List<DropdownMenuItem<Specie>> dropdownSpecies;
   bool userLogged = false;
 
-
-
   void initState() {
     super.initState();
     dropdownSpecies = buildDropDownMenuItems(globals.speciesItems);
@@ -83,9 +81,9 @@ class Publish1State extends State<Publish1> {
             ),
           ),
           SizedBox(height: 20),
-          TextInput(name, 'Nombre del animal', false),
+          TextInput(name, 'Nombre del animal', false, false),
           SizedBox(height: 15),
-          TextInput(breed, 'Raza', false),
+          TextInput(breed, 'Raza', false, false),
           SizedBox(height: 15),
           DropDownInputSpecies(dropdownSpecies),
           SizedBox(height: 15),

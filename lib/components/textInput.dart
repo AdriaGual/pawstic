@@ -5,11 +5,12 @@ class TextInput extends StatefulWidget {
   final TextEditingController controller;
   final String text;
   final bool obscureText;
-  TextInput(this.controller, this.text, this.obscureText);
+  final bool readOnly;
+  TextInput(this.controller, this.text, this.obscureText, this.readOnly);
 
   @override
-  State<StatefulWidget> createState() =>
-      TextInputState(this.controller, this.text, this.obscureText);
+  State<StatefulWidget> createState() => TextInputState(
+      this.controller, this.text, this.obscureText, this.readOnly);
 }
 
 String validateField(String value) {
@@ -23,7 +24,8 @@ class TextInputState extends State<TextInput> {
   TextEditingController controller;
   String text;
   bool obscureText;
-  TextInputState(this.controller, this.text, this.obscureText);
+  bool readOnly;
+  TextInputState(this.controller, this.text, this.obscureText, this.readOnly);
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +33,7 @@ class TextInputState extends State<TextInput> {
       controller: this.controller,
       cursorColor: globals.primaryColor,
       obscureText: this.obscureText,
+      readOnly: this.readOnly,
       style: TextStyle(
           fontFamily: 'PoppinsRegular',
           fontSize: 17.0,

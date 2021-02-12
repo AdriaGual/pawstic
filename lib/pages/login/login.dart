@@ -153,9 +153,9 @@ class LoginState extends State<Login> {
                     ),
                   ),
                   SizedBox(height: 20),
-                  TextInput(name, 'Nombre', false),
+                  TextInput(name, 'Nombre', false, false),
                   SizedBox(height: 20),
-                  TextInput(password, 'Contraseña', true),
+                  TextInput(password, 'Contraseña', true, false),
                   SizedBox(height: 15),
                   Align(
                     alignment: Alignment.topRight,
